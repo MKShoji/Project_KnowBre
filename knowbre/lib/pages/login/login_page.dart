@@ -42,6 +42,10 @@ class _LoginPageState extends State<LoginPage> {
     }
   }
 
+  Widget _errorMassege() {
+    return Text(errorMassage == '' ? '' : 'Humm ? $errorMassage');
+  }
+
   Widget _entryField(
     String title,
     TextEditingController controller,
@@ -52,10 +56,6 @@ class _LoginPageState extends State<LoginPage> {
         labelText: title,
       ),
     );
-  }
-
-  Widget _errorMassege() {
-    return Text(errorMassage == '' ? '' : 'Humm ? $errorMassage');
   }
 
   Widget _submitButton() {
@@ -92,7 +92,7 @@ class _LoginPageState extends State<LoginPage> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             _entryField('email', _controllerEmail),
-            _entryField('password', _controllerPassword),
+            _entryField('senha', _controllerPassword),
             _errorMassege(),
             _submitButton(),
             _loginOrRegisterButton(),

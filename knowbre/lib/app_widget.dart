@@ -6,33 +6,28 @@ import 'package:knowbre/pages/splash/splash_page.dart';
 import 'package:knowbre/shared/auth/auth.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
-class AppWiget extends StatefulWidget {
-  const AppWiget({Key? key}) : super(key: key);
+class AppWidget extends StatefulWidget {
+  const AppWidget({Key? key}) : super(key: key);
 
   @override
-  State<AppWiget> createState() => _AppWigetState();
+  State<AppWidget> createState() => _AppWigetState();
 }
 
-class _AppWigetState extends State<AppWiget> {
+class _AppWigetState extends State<AppWidget> {
   @override
   Widget build(BuildContext context) {
-    return StreamBuilder(
-        stream: Auth().auhtStateChanges,
-        builder: (context, snapshot) {
-          if (snapshot.hasData) {
-            return HomePage();
-          } else {
-            return const LoginPage();
-          }
-        });
+    return MaterialApp(
+      title: 'KnowBre',
+      theme: ThemeData(
+        primarySwatch: Colors.blue,
+      ),
+      initialRoute: '/splash',
+      routes: {
+        '/splash': (_) => const SplashScreen(),
+        '/welcome': (_) => const WelcomePage(),
+        '/login': (_) => const LoginPage(),
+        '/home': (_) => HomePage(),
+      },
+    );
   }
 }
-
-
-///      initialRoute: '/splash',
-///     routes: {
-///        '/splash': (_) => const SplashPage(),
-///        '/welcome': (_) => const WelcomePage(),
-///        '/login': (_) => const LoginPage(),
-///       '/home': (_) => HomePage(),
-///      },
