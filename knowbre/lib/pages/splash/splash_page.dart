@@ -14,13 +14,13 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
     // TODO: implement initState
-    super.initState();
+    // super.initState();
     FirebaseAuth.instance.authStateChanges().listen((User? user) async {
       await Future.delayed(Duration(seconds: 2));
       if (user == null) {
         Navigator.pushReplacementNamed(context, "/welcome");
       } else {
-        Navigator.pushReplacementNamed(context, "/login");
+        Navigator.pushReplacementNamed(context, "/home");
       }
     });
   }

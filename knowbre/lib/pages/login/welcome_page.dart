@@ -59,7 +59,9 @@ class _WelcomePageState extends State<WelcomePage> {
                 SignInButton(
                   Buttons.email,
                   text: "Entrar com email",
-                  onPressed: () {},
+                  onPressed: () {
+                    Navigator.pushReplacementNamed(context, "/login");
+                  },
                 ),
                 const Divider(
                   height: 15,

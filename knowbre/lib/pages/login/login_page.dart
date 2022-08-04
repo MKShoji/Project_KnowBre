@@ -96,7 +96,11 @@ class _LoginPageState extends State<LoginPage> {
             _errorMassege(),
             _submitButton(),
             _loginOrRegisterButton(),
+            ElevatedButton(onPressed: (() {
+              Navigator.popAndPushNamed(context, '/welcome');
+            }), child: const Text('Retornar'),)
           ],
+          
         ),
       ),
     );
