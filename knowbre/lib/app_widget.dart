@@ -25,7 +25,7 @@ class _AppWigetState extends State<AppWidget> {
       routes: {
         '/splash': (_) => const SplashScreen(),
         '/welcome': (_) => const WelcomePage(),
-        '/login': (_) => const LoginPage(),
+        '/login': (_) => const AuthPage(),
         '/home': (_) => HomePage(),
       },
     );

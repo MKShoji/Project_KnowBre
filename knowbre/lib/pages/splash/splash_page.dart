@@ -1,7 +1,9 @@
+import 'dart:async';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:knowbre/app_widget.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:knowbre/pages/login/welcome_page.dart';
+import 'package:knowbre/shared/themes/app_images.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({Key? key}) : super(key: key);
@@ -13,15 +15,14 @@ class SplashScreen extends StatefulWidget {
 class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
-    // TODO: implement initState
-    // super.initState();
-    FirebaseAuth.instance.authStateChanges().listen((User? user) async {
-      await Future.delayed(Duration(seconds: 2));
-      if (user == null) {
-        Navigator.pushReplacementNamed(context, "/welcome");
-      } else {
-        Navigator.pushReplacementNamed(context, "/home");
-      }
+    super.initState();
+    Future.delayed(const Duration(seconds: 3)).then((_) {
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+          builder: (context) => const WelcomePage(),
+        ),
+      );
     });
   }
 
@@ -30,10 +31,13 @@ class _SplashScreenState extends State<SplashScreen> {
     return Scaffold(
       backgroundColor: Colors.white,
       body: Stack(
-        children: const [
+        children: [
           Center(
-            child: FlutterLogo(
-              size: 150,
+            child: Image.asset(
+              AppImages.logo,
+              width: 500,
+              height: 500,
+              fit: BoxFit.fill,
             ),
           )
         ],

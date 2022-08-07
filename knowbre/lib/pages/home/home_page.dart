@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:knowbre/app_widget.dart';
 import 'package:knowbre/shared/auth/auth.dart';
 
 class HomePage extends StatelessWidget {
@@ -12,7 +13,7 @@ class HomePage extends StatelessWidget {
   }
 
   Widget _title() {
-    return const Text("Firebase Auth teste");
+    return const Text("Home");
   }
 
   Widget _userUid() {
@@ -28,6 +29,7 @@ class HomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    print(user);
     return Scaffold(
       appBar: AppBar(
         title: _title(),

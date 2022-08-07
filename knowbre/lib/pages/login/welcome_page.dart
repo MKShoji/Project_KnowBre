@@ -1,5 +1,7 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:knowbre/pages/login/login_page.dart';
+import 'package:flutterfire_ui/auth.dart';
+import 'package:knowbre/shared/themes/app_images.dart';
 import 'package:sign_in_button/sign_in_button.dart';
 
 class WelcomePage extends StatefulWidget {
@@ -14,26 +16,22 @@ class _WelcomePageState extends State<WelcomePage> {
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Bem-Vindo'),
-        centerTitle: true,
-      ),
       backgroundColor: Colors.white,
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            Container(
-              color: Colors.blue,
-              margin: const EdgeInsets.only(top: 30),
-              child: const Padding(
-                padding: EdgeInsets.all(20),
-                child: Text("Logo"),
-              ),
-            ),
-            const Spacer(
-              flex: 1,
+            Stack(
+              children: [
+                Center(
+                    child: Image.asset(
+                  AppImages.logo,
+                  width: 300,
+                  height: 300,
+                  fit: BoxFit.fill,
+                )),
+              ],
             ),
             const Padding(
               padding: EdgeInsets.only(

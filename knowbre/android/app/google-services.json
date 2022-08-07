@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "338298446122",
+    "project_id": "knowbre-database",
+    "storage_bucket": "knowbre-database.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:338298446122:android:1c9e4bde50b521bb26be53",
+        "android_client_info": {
+          "package_name": "com.example.knowbre"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "338298446122-o4og2bpghbmnjoekmfh656do5pdbuc80.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAbcfHqXowiPu3AC8fmhh1zficALQG_v8o"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "338298446122-o4og2bpghbmnjoekmfh656do5pdbuc80.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "338298446122-45rc499tvc3sbh23lqnjbr21rvj3ndae.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "clear"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
