@@ -2,9 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:knowbre/pages/home/home_page.dart';
 import 'package:knowbre/pages/login/login_page.dart';
 import 'package:knowbre/pages/login/welcome_page.dart';
+import 'package:knowbre/pages/profile/profile_page.dart';
 import 'package:knowbre/pages/splash/splash_page.dart';
-import 'package:knowbre/shared/auth/auth.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 
 class AppWidget extends StatefulWidget {
   const AppWidget({Key? key}) : super(key: key);
@@ -27,6 +26,7 @@ class _AppWigetState extends State<AppWidget> {
         '/welcome': (_) => const WelcomePage(),
         '/login': (_) => const AuthPage(),
         '/home': (_) => HomePage(),
+        '/profile': (_) => const ProfilePage(),
       },
     );
   }

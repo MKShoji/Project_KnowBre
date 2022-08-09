@@ -1,11 +1,11 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/material.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 
-class Auth {
+class AuthServices {
   final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
 
   User? get currentUser => _firebaseAuth.currentUser;
-
-  Stream<User?> get auhtStateChanges => _firebaseAuth.authStateChanges();
 
   Future<void> signInWithEmailAndPassword({
     required String email,
@@ -18,6 +18,7 @@ class Auth {
   Future<void> createUserWithEmailAndPassword({
     required String email,
     required String password,
+    required String name,
   }) async {
     await _firebaseAuth.createUserWithEmailAndPassword(
       email: email,
@@ -27,5 +28,8 @@ class Auth {
 
   Future<void> signOut() async {
     await _firebaseAuth.signOut();
+    GoogleSignIn _googleSignIn = GoogleSignIn();
+    await _googleSignIn.disconnect();
+    const SnackBar(content: Text('signOut'));
   }
 }
