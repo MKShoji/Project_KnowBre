@@ -28,8 +28,12 @@ class AuthServices {
 
   Future<void> signOut() async {
     await _firebaseAuth.signOut();
+    const SnackBar(content: Text('signOut'));
+  }
+
+  Future<void> signOutProvider() async {
+    await _firebaseAuth.signOut();
     GoogleSignIn _googleSignIn = GoogleSignIn();
     await _googleSignIn.disconnect();
-    const SnackBar(content: Text('signOut'));
   }
 }
