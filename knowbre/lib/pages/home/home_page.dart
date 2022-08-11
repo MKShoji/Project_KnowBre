@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:knowbre/app_widget.dart';
 import 'package:knowbre/shared/auth/auth_services.dart';
 import 'package:knowbre/shared/models/user.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class HomePage extends StatefulWidget {
   HomePage({Key? key}) : super(key: key);
@@ -33,29 +31,6 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      drawer: Drawer(
-        child: ListView(children: [
-          UserAccountsDrawerHeader(
-            currentAccountPicture: CircleAvatar(
-              backgroundImage: NetworkImage(user?.photoURL ?? ''),
-            ),
-            accountName: Text(user?.displayName ?? "User name"),
-            accountEmail: Text(user?.email ?? "User email"),
-          ),
-          ListTile(
-            dense: true,
-            title: Text('Profile'),
-            selected: true,
-            trailing: Icon(Icons.person),
-            onTap: () {
-              Navigator.popAndPushNamed(context, '/profile');
-            },
-          ),
-        ]),
-      ),
-      appBar: AppBar(
-        title: _title(),
-      ),
       body: Container(
         height: double.infinity,
         width: double.infinity,

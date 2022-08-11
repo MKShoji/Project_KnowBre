@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutterfire_ui/auth.dart';
 import 'package:knowbre/pages/home/home_page.dart';
+import 'package:knowbre/pages/home/home_page_controller.dart';
 
 class AuthPage extends StatelessWidget {
   const AuthPage({Key? key}) : super(key: key);
@@ -30,7 +31,7 @@ class AuthPage extends StatelessWidget {
             },
           );
         }
-        return HomePage();
+        return const HomePageController();
       },
     );
   }
