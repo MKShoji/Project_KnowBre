@@ -35,7 +35,7 @@ dependencies:
 
 flutter_native_splash:
   color: "#192EFF"
-  image: assets\images\knowbre.png
+  image: assets\images\knowbre-logo.png
 
 
   # The following adds the Cupertino Icons font to your application.
