@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:knowbre/shared/models/user.dart';
-import 'package:knowbre/shared/services/auth_controller.dart';
 import 'package:knowbre/shared/services/database.dart';
 
 class AuthServices {
@@ -43,6 +42,12 @@ class AuthServices {
       "email": email,
       "nome": nome,
       "uid": _firebaseAuth.currentUser!.uid,
+      "idade": '',
+      "apelido": '',
+      "formacao": '',
+      "photoURL": '',
+      "date": _firebaseAuth.currentUser?.metadata.creationTime,
+      "bio": '',
     };
 
     if (userCredential != null) {
