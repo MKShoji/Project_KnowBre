@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:knowbre/shared/auth/auth_services.dart';
+
 import 'package:knowbre/shared/models/user.dart';
+import 'package:knowbre/shared/services/auth_services.dart';
 
 class HomePage extends StatefulWidget {
   HomePage({Key? key}) : super(key: key);
@@ -11,7 +12,7 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  final User? user = AuthServices().currentUser;
+  final User? user = AuthServices().getCurrentUser() as User?;
 
   Future<void> siginOut() async {
     await AuthServices().signOut();

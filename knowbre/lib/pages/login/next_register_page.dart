@@ -1,26 +1,19 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:knowbre/shared/services/auth_services.dart';
 import 'package:knowbre/shared/themes/app_colors.dart';
-import 'package:sign_in_button/sign_in_button.dart';
+import 'package:brasil_fields/brasil_fields.dart';
 
-class AuthPage extends StatefulWidget {
-  const AuthPage({Key? key}) : super(key: key);
+class NextRegisterPage extends StatefulWidget {
+  const NextRegisterPage({Key? key}) : super(key: key);
 
   @override
-  State<AuthPage> createState() => _AuthPageState();
+  State<NextRegisterPage> createState() => _NextRegisterPageState();
 }
 
-class _AuthPageState extends State<AuthPage> {
-  String? errorMassage = '';
-
-  final _emailController = TextEditingController();
-  final _passwordController = TextEditingController();
-
-  Widget _titleLogin() {
+class _NextRegisterPageState extends State<NextRegisterPage> {
+  Widget _titleRegister() {
     return const Text(
-      "Entrar",
+      "Configure seu perfil",
       style: TextStyle(
         fontSize: 32,
         color: AppColor.primary,
@@ -28,27 +21,14 @@ class _AuthPageState extends State<AuthPage> {
     );
   }
 
-  Widget _textHeader() {
-    return Container(
-      width: 250,
-      child: const Text(
-        "Entre utilizando uma das seguintes opções:",
-        style: TextStyle(
-          fontSize: 20,
-          fontFamily: 'Montserrat',
-        ),
-      ),
-    );
-  }
-
-  Widget _textFieldFormEmail() {
+  Widget _textFieldNome() {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
         const Padding(
           padding: EdgeInsets.only(bottom: 6.0),
           child: Text(
-            'Email',
+            'Nome',
             style: TextStyle(
               fontSize: 18.0,
               fontFamily: 'Montserrat',
@@ -58,8 +38,7 @@ class _AuthPageState extends State<AuthPage> {
         Container(
           height: 50.0,
           child: TextFormField(
-            controller: _emailController,
-            keyboardType: TextInputType.emailAddress,
+            keyboardType: TextInputType.name,
             decoration: const InputDecoration(
               suffixIcon: Icon(Icons.check_circle),
               border: OutlineInputBorder(),
@@ -72,14 +51,14 @@ class _AuthPageState extends State<AuthPage> {
     );
   }
 
-  Widget _textFieldFormPassword() {
+  Widget _textFieldData() {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
         const Padding(
           padding: EdgeInsets.only(bottom: 6.0),
           child: Text(
-            'Senha',
+            'Data de Nascimento',
             style: TextStyle(
               fontSize: 18.0,
               fontFamily: 'Montserrat',
@@ -89,13 +68,16 @@ class _AuthPageState extends State<AuthPage> {
         Container(
           height: 50.0,
           child: TextFormField(
-            controller: _passwordController,
-            obscureText: true,
+            inputFormatters: [
+              FilteringTextInputFormatter.digitsOnly,
+              DataInputFormatter(),
+            ],
             decoration: const InputDecoration(
               suffixIcon: Icon(Icons.check_circle),
               border: OutlineInputBorder(),
               enabledBorder: OutlineInputBorder(
-                  borderSide: BorderSide(color: AppColor.primary)),
+                borderSide: BorderSide(color: AppColor.primary),
+              ),
             ),
           ),
         ),
@@ -103,19 +85,16 @@ class _AuthPageState extends State<AuthPage> {
     );
   }
 
-  Widget _loginBtn() {
+  Widget _registerBtn() {
     return Container(
       padding: const EdgeInsets.symmetric(vertical: 25.0),
       width: double.infinity,
       child: RaisedButton(
-        onPressed: () {
-          AuthServices().signIn(
-              email: _emailController.text, password: _passwordController.text);
-        },
+        onPressed: () => print('Register Button Pressed'),
         padding: const EdgeInsets.all(15.0),
         color: AppColor.primary,
         child: const Text(
-          'Entar',
+          'Registrar',
           style: TextStyle(
             color: Colors.white,
             letterSpacing: 1.5,
@@ -128,7 +107,7 @@ class _AuthPageState extends State<AuthPage> {
     );
   }
 
-  Widget _buildSignUpButton() {
+  Widget _buildSignInButton() {
     return GestureDetector(
       onTap: () {
         Navigator.pushReplacementNamed(context, "/register");
@@ -138,7 +117,7 @@ class _AuthPageState extends State<AuthPage> {
           text: const TextSpan(
             children: [
               TextSpan(
-                text: 'Ainda não possui uma conta ? ',
+                text: 'Já possui uma conta? ',
                 style: TextStyle(
                   color: Color(0xFF4A4A4A),
                   fontSize: 16.0,
@@ -146,7 +125,7 @@ class _AuthPageState extends State<AuthPage> {
                 ),
               ),
               TextSpan(
-                text: 'Cadastre-se',
+                text: 'Voltar',
                 style: TextStyle(
                   color: AppColor.primary,
                   fontSize: 16.0,
@@ -160,69 +139,60 @@ class _AuthPageState extends State<AuthPage> {
     );
   }
 
-  Widget _buildForgotPasswordBtn() {
-    return Container(
-      alignment: Alignment.centerRight,
-      child: FlatButton(
-        onPressed: () {
-          Navigator.pushReplacementNamed(context, "/forgot_password");
-        },
-        padding: EdgeInsets.only(right: 0.0),
-        child: Text(
-          'Esqueceu sua senha?',
-          style: TextStyle(
-            color: AppColor.primary,
-            fontSize: 16.0,
-          ),
-        ),
-      ),
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
       body: SafeArea(
         child: Padding(
-          padding: EdgeInsets.fromLTRB(20, 20, 30, 30),
+          padding: const EdgeInsets.fromLTRB(20, 20, 30, 30),
           child: SingleChildScrollView(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
-                _titleLogin(),
-                const SizedBox(
-                  height: 20.0,
-                ),
-                _textHeader(),
-                const SizedBox(
-                  height: 20.0,
-                ),
-                SignInButton(
-                  Buttons.googleDark,
-                  onPressed: () {},
-                ),
-                const SizedBox(
-                  height: 20.0,
-                ),
+                _titleRegister(),
+                const SizedBox(height: 15),
                 const Text(
-                  "Ou entre utilizando seu e-mail:",
+                  "Escolha uma foto de perfil",
                   style: TextStyle(
                     fontSize: 20,
                     fontFamily: 'Montserrat',
                   ),
                 ),
-                const SizedBox(
-                  height: 20.0,
+                const SizedBox(height: 30),
+                Form(
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                    child: Center(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: <Widget>[
+                          const SizedBox(
+                            height: 15.0,
+                          ),
+                          const CircleAvatar(
+                            radius: 100,
+                            backgroundColor: Colors.grey,
+                          ),
+                          const SizedBox(
+                            height: 15.0,
+                          ),
+                          _textFieldNome(),
+                          const SizedBox(
+                            height: 30.0,
+                          ),
+                          _textFieldData(),
+                          const SizedBox(
+                            height: 10.0,
+                          ),
+                          _registerBtn(),
+                          _buildSignInButton(),
+                        ],
+                      ),
+                    ),
+                  ),
                 ),
-                _textFieldFormEmail(),
-                const SizedBox(
-                  height: 10.0,
-                ),
-                _textFieldFormPassword(),
-                _buildForgotPasswordBtn(),
-                _loginBtn(),
-                _buildSignUpButton(),
               ],
             ),
           ),

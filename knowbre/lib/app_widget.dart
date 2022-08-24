@@ -2,11 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:knowbre/pages/home/home_page.dart';
 import 'package:knowbre/pages/login/forgot_password_page.dart';
 import 'package:knowbre/pages/login/login_page.dart';
+import 'package:knowbre/pages/login/next_register_page.dart';
 import 'package:knowbre/pages/login/register_page.dart';
 import 'package:knowbre/pages/login/welcome_page.dart';
 import 'package:knowbre/pages/profile/profile_page.dart';
 import 'package:knowbre/pages/splash/splash_page.dart';
 import 'package:knowbre/shared/themes/app_colors.dart';
+
+import 'pages/home/home_page_controller.dart';
 
 class AppWidget extends StatefulWidget {
   const AppWidget({Key? key}) : super(key: key);
@@ -30,9 +33,10 @@ class _AppWigetState extends State<AppWidget> {
         '/welcome': (_) => const WelcomePage(),
         '/login': (_) => const AuthPage(),
         '/register': (_) => const RegisterPage(),
+        '/register2': (_) => const NextRegisterPage(),
         '/forgot_password': (_) => const ForgotPasswordPage(),
-        '/home': (_) => HomePage(),
-        '/profile': (_) => const ProfilePage(),
+        '/home': (_) => const HomePageController(),
+        // '/profile': (_) => const ProfilePage(),
       },
     );
   }

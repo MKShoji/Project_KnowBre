@@ -2,7 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:knowbre/pages/cursos/cursos_page.dart';
 import 'package:knowbre/pages/favoritos/favoritos_page.dart';
-import 'package:knowbre/shared/auth/auth_services.dart';
+import 'package:knowbre/shared/services/auth_services.dart';
 
 import '../search/search_page.dart';
 import 'home_page.dart';
@@ -15,7 +15,7 @@ class HomePageController extends StatefulWidget {
 }
 
 class _HomePageControllerState extends State<HomePageController> {
-  final User? user = AuthServices().currentUser;
+  final User? user = AuthServices().getCurrentUser() as User?;
   int currentTab = 0;
 
   final List<Widget> screens = [
