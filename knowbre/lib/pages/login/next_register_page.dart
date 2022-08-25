@@ -1,5 +1,9 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutterfire_ui/auth.dart';
+import 'package:knowbre/shared/services/auth_services.dart';
+import 'package:knowbre/shared/services/database.dart';
 import 'package:knowbre/shared/themes/app_colors.dart';
 import 'package:brasil_fields/brasil_fields.dart';
 
@@ -11,6 +15,12 @@ class NextRegisterPage extends StatefulWidget {
 }
 
 class _NextRegisterPageState extends State<NextRegisterPage> {
+  final _formKey = GlobalKey<FormState>();
+
+  final apelidoController = TextEditingController();
+  final dataController = TextEditingController(
+      text: UtilData.obterDataDDMMAAAA(DateTime(2022, 12, 31)));
+
   Widget _titleRegister() {
     return const Text(
       "Configure seu perfil",
@@ -21,7 +31,7 @@ class _NextRegisterPageState extends State<NextRegisterPage> {
     );
   }
 
-  Widget _textFieldNome() {
+  Widget _textFieldApelido() {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
@@ -39,6 +49,19 @@ class _NextRegisterPageState extends State<NextRegisterPage> {
           height: 50.0,
           child: TextFormField(
             keyboardType: TextInputType.name,
+            controller: apelidoController,
+            validator: (value) {
+              RegExp regex = RegExp(r'^.{2,}$');
+              if (value!.isEmpty) {
+                return ("Por favor preencher campo obrigatório");
+              }
+              if (!regex.hasMatch(value)) {
+                return ("Nome deve conter pelo menos mais de 2 caracteres");
+              }
+            },
+            onSaved: (value) {
+              apelidoController.text = value!;
+            },
             decoration: const InputDecoration(
               suffixIcon: Icon(Icons.check_circle),
               border: OutlineInputBorder(),
@@ -72,6 +95,15 @@ class _NextRegisterPageState extends State<NextRegisterPage> {
               FilteringTextInputFormatter.digitsOnly,
               DataInputFormatter(),
             ],
+            controller: dataController,
+            validator: (value) {
+              if (value!.isEmpty) {
+                return ("Por favor preencher campo obrigatório");
+              }
+            },
+            onSaved: (value) {
+              dataController.text = value!;
+            },
             decoration: const InputDecoration(
               suffixIcon: Icon(Icons.check_circle),
               border: OutlineInputBorder(),
@@ -90,7 +122,19 @@ class _NextRegisterPageState extends State<NextRegisterPage> {
       padding: const EdgeInsets.symmetric(vertical: 25.0),
       width: double.infinity,
       child: RaisedButton(
-        onPressed: () => print('Register Button Pressed'),
+        onPressed: () {
+          if (_formKey.currentState!.validate() == true) {
+            DatabaseMethods().firebaseFirestore;
+            DatabaseMethods()
+                .firebaseFirestore
+                .collection("users")
+                .doc('uid')
+                .update({
+              'apelido': apelidoController.text,
+              'dataNasc': dataController.text
+            }).then((value) {});
+          }
+        },
         padding: const EdgeInsets.all(15.0),
         color: AppColor.primary,
         child: const Text(
@@ -161,6 +205,7 @@ class _NextRegisterPageState extends State<NextRegisterPage> {
                 ),
                 const SizedBox(height: 30),
                 Form(
+                  key: _formKey,
                   child: Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 20.0),
                     child: Center(
@@ -178,7 +223,7 @@ class _NextRegisterPageState extends State<NextRegisterPage> {
                           const SizedBox(
                             height: 15.0,
                           ),
-                          _textFieldNome(),
+                          _textFieldApelido(),
                           const SizedBox(
                             height: 30.0,
                           ),

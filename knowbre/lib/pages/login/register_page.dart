@@ -1,5 +1,3 @@
-import 'dart:math';
-
 import 'package:flutter/material.dart';
 import 'package:knowbre/pages/login/next_register_page.dart';
 import 'package:knowbre/shared/services/auth_services.dart';
@@ -51,7 +49,7 @@ class _RegisterPageState extends State<RegisterPage> {
             keyboardType: TextInputType.name,
             controller: nameController,
             validator: (value) {
-              RegExp regex = RegExp('[a-zA-Z]');
+              RegExp regex = RegExp('[a-zA-Z]{6,}');
               if (value!.isEmpty) {
                 return "Por favor preencha o campo";
               } else if (!regex.hasMatch(value)) {
@@ -137,7 +135,7 @@ class _RegisterPageState extends State<RegisterPage> {
             validator: (value) {
               RegExp regex = RegExp(r'^.{6,}$');
               if (value!.isEmpty) {
-                return ("Password is required for login");
+                return ("Preencher campo obrigatório");
               }
               if (!regex.hasMatch(value)) {
                 return ("Enter Valid Password(Min. 6 Character)");
@@ -175,6 +173,7 @@ class _RegisterPageState extends State<RegisterPage> {
           height: 50.0,
           child: TextFormField(
             keyboardType: TextInputType.visiblePassword,
+            obscureText: true,
             controller: confirmPasswordController,
             validator: (value) {
               if (confirmPasswordController.text != passwordController.text) {

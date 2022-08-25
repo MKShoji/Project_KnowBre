@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:knowbre/pages/home/home_page_controller.dart';
 import 'package:knowbre/shared/services/auth_services.dart';
 import 'package:knowbre/shared/themes/app_colors.dart';
 import 'package:sign_in_button/sign_in_button.dart';
@@ -13,7 +14,7 @@ class AuthPage extends StatefulWidget {
 }
 
 class _AuthPageState extends State<AuthPage> {
-  String? errorMassage = '';
+  final _formKey = GlobalKey<FormState>();
 
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
@@ -59,6 +60,18 @@ class _AuthPageState extends State<AuthPage> {
           height: 50.0,
           child: TextFormField(
             controller: _emailController,
+            validator: (value) {
+              if (value!.isEmpty) {
+                return "Por favor preencha o campo email";
+              }
+              if (!RegExp("^[a-zA-Z0-9+_.-]+@[a-zA-Z0-9.-]+.[a-z]")
+                  .hasMatch(value)) {
+                return ("Please Enter a valid email");
+              }
+            },
+            onSaved: (value) {
+              _emailController.text = value!;
+            },
             keyboardType: TextInputType.emailAddress,
             decoration: const InputDecoration(
               suffixIcon: Icon(Icons.check_circle),
@@ -90,6 +103,18 @@ class _AuthPageState extends State<AuthPage> {
           height: 50.0,
           child: TextFormField(
             controller: _passwordController,
+            validator: (value) {
+              RegExp regex = RegExp(r'^.{6,}$');
+              if (value!.isEmpty) {
+                return ("Password is required for login");
+              }
+              if (!regex.hasMatch(value)) {
+                return ("Enter Valid Password(Min. 6 Character)");
+              }
+            },
+            onSaved: (value) {
+              _passwordController.text = value!;
+            },
             obscureText: true,
             decoration: const InputDecoration(
               suffixIcon: Icon(Icons.check_circle),
@@ -109,8 +134,20 @@ class _AuthPageState extends State<AuthPage> {
       width: double.infinity,
       child: RaisedButton(
         onPressed: () {
-          AuthServices().signIn(
-              email: _emailController.text, password: _passwordController.text);
+          if (_formKey.currentState!.validate() == true) {
+            AuthServices()
+                .signIn(
+                    email: _emailController.text,
+                    password: _passwordController.text)
+                .then((value) {
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const HomePageController(),
+                ),
+              );
+            });
+          }
         },
         padding: const EdgeInsets.all(15.0),
         color: AppColor.primary,
@@ -168,7 +205,7 @@ class _AuthPageState extends State<AuthPage> {
           Navigator.pushReplacementNamed(context, "/forgot_password");
         },
         padding: EdgeInsets.only(right: 0.0),
-        child: Text(
+        child: const Text(
           'Esqueceu sua senha?',
           style: TextStyle(
             color: AppColor.primary,
@@ -184,46 +221,49 @@ class _AuthPageState extends State<AuthPage> {
     return Scaffold(
       backgroundColor: Colors.white,
       body: SafeArea(
-        child: Padding(
-          padding: EdgeInsets.fromLTRB(20, 20, 30, 30),
-          child: SingleChildScrollView(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                _titleLogin(),
-                const SizedBox(
-                  height: 20.0,
-                ),
-                _textHeader(),
-                const SizedBox(
-                  height: 20.0,
-                ),
-                SignInButton(
-                  Buttons.googleDark,
-                  onPressed: () {},
-                ),
-                const SizedBox(
-                  height: 20.0,
-                ),
-                const Text(
-                  "Ou entre utilizando seu e-mail:",
-                  style: TextStyle(
-                    fontSize: 20,
-                    fontFamily: 'Montserrat',
+        child: Form(
+          key: _formKey,
+          child: Padding(
+            padding: EdgeInsets.fromLTRB(20, 20, 30, 30),
+            child: SingleChildScrollView(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  _titleLogin(),
+                  const SizedBox(
+                    height: 20.0,
                   ),
-                ),
-                const SizedBox(
-                  height: 20.0,
-                ),
-                _textFieldFormEmail(),
-                const SizedBox(
-                  height: 10.0,
-                ),
-                _textFieldFormPassword(),
-                _buildForgotPasswordBtn(),
-                _loginBtn(),
-                _buildSignUpButton(),
-              ],
+                  _textHeader(),
+                  const SizedBox(
+                    height: 20.0,
+                  ),
+                  SignInButton(
+                    Buttons.googleDark,
+                    onPressed: () {},
+                  ),
+                  const SizedBox(
+                    height: 20.0,
+                  ),
+                  const Text(
+                    "Ou entre utilizando seu e-mail:",
+                    style: TextStyle(
+                      fontSize: 20,
+                      fontFamily: 'Montserrat',
+                    ),
+                  ),
+                  const SizedBox(
+                    height: 20.0,
+                  ),
+                  _textFieldFormEmail(),
+                  const SizedBox(
+                    height: 10.0,
+                  ),
+                  _textFieldFormPassword(),
+                  _buildForgotPasswordBtn(),
+                  _loginBtn(),
+                  _buildSignUpButton(),
+                ],
+              ),
             ),
           ),
         ),

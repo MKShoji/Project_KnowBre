@@ -9,4 +9,8 @@ class DatabaseMethods {
   Future addUserInfotoDB(String uid, Map<String, dynamic> userModel) {
     return firebaseFirestore.collection("users").doc(uid).set(userModel);
   }
+
+  Future<DocumentSnapshot> getUserfromDB(String uid) {
+    return firebaseFirestore.collection("users").doc(uid).get();
+  }
 }

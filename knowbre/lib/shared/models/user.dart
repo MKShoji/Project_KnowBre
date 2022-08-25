@@ -37,10 +37,7 @@ class UserModel {
     );
   }
 
-  factory UserModel.fromJson(String json) =>
-      UserModel.fromMap(jsonDecode(json));
-
-  Map<String, dynamic> toMap() => {
+  Map<String, dynamic> toJson() => {
         "email": email,
         "name": nome,
         "photoURL": photoURL,
@@ -51,5 +48,4 @@ class UserModel {
         "apelido": apelido,
         "date": date,
       };
-  String toJason() => jsonEncode(toMap());
 }

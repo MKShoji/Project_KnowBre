@@ -11,7 +11,7 @@ class AuthServices {
   final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
 
   Future<User?> getCurrentUser() async {
-    return _firebaseAuth.currentUser;
+    return await _firebaseAuth.currentUser;
   }
 
   Stream<User?> get auhtStateChanges => _firebaseAuth.authStateChanges();
@@ -42,11 +42,11 @@ class AuthServices {
       "email": email,
       "nome": nome,
       "uid": _firebaseAuth.currentUser!.uid,
-      "idade": '',
+      "dataNasc": '',
       "apelido": '',
       "formacao": '',
       "photoURL": '',
-      "date": _firebaseAuth.currentUser?.metadata.creationTime,
+      "dataCriacao": _firebaseAuth.currentUser?.metadata.creationTime,
       "bio": '',
     };
 
@@ -54,11 +54,6 @@ class AuthServices {
       DatabaseMethods()
           .addUserInfotoDB(_firebaseAuth.currentUser!.uid, userModel);
     }
-  }
-
-  Future<bool> isUserLoggedIn() async {
-    var user = _firebaseAuth.currentUser;
-    return user != null;
   }
 
   Future<void> signOut() async {
