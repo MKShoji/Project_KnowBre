@@ -2,7 +2,9 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:knowbre/pages/cursos/cursos_page.dart';
 import 'package:knowbre/pages/favoritos/favoritos_page.dart';
+import 'package:knowbre/shared/models/user.dart';
 import 'package:knowbre/shared/services/auth_services.dart';
+import 'package:knowbre/shared/services/database.dart';
 
 import '../search/search_page.dart';
 import 'home_page.dart';
@@ -15,7 +17,8 @@ class HomePageController extends StatefulWidget {
 }
 
 class _HomePageControllerState extends State<HomePageController> {
-  final User? user = AuthServices().getCurrentUser() as User?;
+  final User? _user = AuthServices().currentUser;
+
   int currentTab = 0;
 
   final List<Widget> screens = [
@@ -35,10 +38,10 @@ class _HomePageControllerState extends State<HomePageController> {
         child: ListView(children: [
           UserAccountsDrawerHeader(
             currentAccountPicture: CircleAvatar(
-              backgroundImage: NetworkImage(user?.photoURL ?? ''),
+              backgroundImage: NetworkImage(_user?.photoURL ?? ''),
             ),
-            accountName: Text(user?.displayName ?? "User name"),
-            accountEmail: Text(user?.email ?? "User email"),
+            accountName: Text(_user?.displayName ?? "User name"),
+            accountEmail: Text(_user?.email ?? "User email"),
           ),
           ListTile(
             dense: true,

@@ -5,11 +5,11 @@ class UserModel {
   final String photoURL;
   final String email;
   final String nome;
-  final String idade;
+  final DateTime? creationTime;
   final String bio;
   final String formacao;
   final String apelido;
-  final String date;
+  final String dataNasc;
 
   UserModel({
     required this.uid,
@@ -17,10 +17,10 @@ class UserModel {
     required this.email,
     required this.photoURL,
     required this.apelido,
-    required this.idade,
+    required this.creationTime,
     required this.bio,
     required this.formacao,
-    required this.date,
+    required this.dataNasc,
   });
 
   factory UserModel.fromMap(Map<String, dynamic> map) {
@@ -29,11 +29,11 @@ class UserModel {
       nome: map['name'],
       photoURL: map['photoURL'],
       uid: map['uid'],
-      idade: map['idade'],
+      creationTime: map['creationTime'],
       formacao: map['formacao'],
       bio: map['bio'],
       apelido: map['apelido'],
-      date: map['date'],
+      dataNasc: map['dataNasc'],
     );
   }
 
@@ -42,10 +42,10 @@ class UserModel {
         "name": nome,
         "photoURL": photoURL,
         "uid": uid,
-        "idade": idade,
+        "idade": creationTime,
         "formacao": formacao,
         "bio": bio,
         "apelido": apelido,
-        "date": date,
+        "date": dataNasc,
       };
 }

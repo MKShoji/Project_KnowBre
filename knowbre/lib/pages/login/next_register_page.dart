@@ -123,17 +123,7 @@ class _NextRegisterPageState extends State<NextRegisterPage> {
       width: double.infinity,
       child: RaisedButton(
         onPressed: () {
-          if (_formKey.currentState!.validate() == true) {
-            DatabaseMethods().firebaseFirestore;
-            DatabaseMethods()
-                .firebaseFirestore
-                .collection("users")
-                .doc('uid')
-                .update({
-              'apelido': apelidoController.text,
-              'dataNasc': dataController.text
-            }).then((value) {});
-          }
+          if (_formKey.currentState!.validate() == true) {}
         },
         padding: const EdgeInsets.all(15.0),
         color: AppColor.primary,

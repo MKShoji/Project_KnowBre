@@ -12,7 +12,7 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  final User? user = AuthServices().getCurrentUser() as User?;
+  final User? user = AuthServices().currentUser;
 
   Future<void> siginOut() async {
     await AuthServices().signOut();

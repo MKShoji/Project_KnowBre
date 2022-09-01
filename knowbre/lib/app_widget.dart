@@ -6,7 +6,7 @@ import 'package:knowbre/pages/login/next_register_page.dart';
 import 'package:knowbre/pages/login/register_page.dart';
 import 'package:knowbre/pages/login/welcome_page.dart';
 import 'package:knowbre/pages/profile/profile_page.dart';
-import 'package:knowbre/pages/splash/splash_page.dart';
+import 'package:knowbre/pages/splash/landing_page.dart';
 import 'package:knowbre/shared/themes/app_colors.dart';
 
 import 'pages/home/home_page_controller.dart';

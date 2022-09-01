@@ -6,11 +6,31 @@ import 'package:knowbre/shared/services/auth_services.dart';
 class DatabaseMethods {
   FirebaseFirestore firebaseFirestore = FirebaseFirestore.instance;
 
-  Future addUserInfotoDB(String uid, Map<String, dynamic> userModel) {
-    return firebaseFirestore.collection("users").doc(uid).set(userModel);
+  Future addUserInfotoDB(String uid, UserModel userModel) {
+    return firebaseFirestore
+        .collection("users")
+        .doc(uid)
+        .set(userModel.toJson());
   }
 
-  Future<DocumentSnapshot> getUserfromDB(String uid) {
-    return firebaseFirestore.collection("users").doc(uid).get();
+  Future updateUserInfotoDB(String uid, UserModel userModel) {
+    return firebaseFirestore
+        .collection("users")
+        .doc(uid)
+        .update(userModel.toJson());
+  }
+
+  Stream<UserModel> streamFirestoreUser() {
+    print('streamFirestoreUser()');
+
+    return firebaseFirestore
+        .doc("users")
+        .snapshots()
+        .map((snapshot) => UserModel.fromMap(snapshot.data()!));
+  }
+
+  Future<UserModel> getUserfromDB(String uid) {
+    return firebaseFirestore.collection("users").doc(uid).get().then(
+        (documentSnapshot) => UserModel.fromMap(documentSnapshot.data()!));
   }
 }

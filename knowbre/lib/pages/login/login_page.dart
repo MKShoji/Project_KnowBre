@@ -140,12 +140,8 @@ class _AuthPageState extends State<AuthPage> {
                     email: _emailController.text,
                     password: _passwordController.text)
                 .then((value) {
-              Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => const HomePageController(),
-                ),
-              );
+              Navigator.pushNamedAndRemoveUntil(
+                  context, '/home', (route) => false);
             });
           }
         },
