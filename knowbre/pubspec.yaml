@@ -46,6 +46,7 @@ dependencies:
   firebase_core: ^1.21.0
   brasil_fields: ^1.4.5
   flutter_native_splash: ^2.1.6
+  get: ^4.6.5
 
 
 dev_dependencies:

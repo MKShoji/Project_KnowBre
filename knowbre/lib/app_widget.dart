@@ -27,7 +27,7 @@ class _AppWigetState extends State<AppWidget> {
         primarySwatch: Colors.blue,
         primaryColor: AppColor.primary,
       ),
-      initialRoute: '/login',
+      initialRoute: '/splash',
       routes: {
         '/splash': (_) => const SplashScreen(),
         '/welcome': (_) => const WelcomePage(),

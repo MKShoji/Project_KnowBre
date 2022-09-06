@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:knowbre/shared/models/user.dart';
+import 'package:knowbre/shared/services/auth_controller.dart';
 import 'package:knowbre/shared/services/auth_services.dart';
 
 class DatabaseMethods {
@@ -18,15 +19,6 @@ class DatabaseMethods {
         .collection("users")
         .doc(uid)
         .update(userModel.toJson());
-  }
-
-  Stream<UserModel> streamFirestoreUser() {
-    print('streamFirestoreUser()');
-
-    return firebaseFirestore
-        .doc("users")
-        .snapshots()
-        .map((snapshot) => UserModel.fromMap(snapshot.data()!));
   }
 
   Future<UserModel> getUserfromDB(String uid) {

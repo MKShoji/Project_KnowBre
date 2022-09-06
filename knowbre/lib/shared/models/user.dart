@@ -2,7 +2,7 @@ import 'dart:convert';
 
 class UserModel {
   final String uid;
-  final String photoURL;
+  final String? photoURL;
   final String email;
   final String nome;
   final DateTime? creationTime;
@@ -37,6 +37,9 @@ class UserModel {
     );
   }
 
+  factory UserModel.fromJson(String json) =>
+      UserModel.fromMap(jsonDecode(json));
+
   Map<String, dynamic> toJson() => {
         "email": email,
         "name": nome,
@@ -48,4 +51,5 @@ class UserModel {
         "apelido": apelido,
         "date": dataNasc,
       };
+  String toJason() => jsonEncode(toJson());
 }

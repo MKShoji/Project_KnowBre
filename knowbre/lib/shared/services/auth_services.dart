@@ -5,10 +5,12 @@ import 'package:google_sign_in/google_sign_in.dart';
 import 'package:knowbre/pages/home/home_page_controller.dart';
 import 'package:knowbre/pages/login/login_page.dart';
 import 'package:knowbre/shared/models/user.dart';
+import 'package:knowbre/shared/services/auth_controller.dart';
 import 'package:knowbre/shared/services/database.dart';
 
 class AuthServices {
   final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
+  final AuthController authController = AuthController();
 
   User? get currentUser => _firebaseAuth.currentUser;
 
@@ -16,16 +18,7 @@ class AuthServices {
     try {
       await _firebaseAuth.signInWithEmailAndPassword(
           email: email, password: password);
-      return StreamBuilder<User?>(
-        stream: FirebaseAuth.instance.authStateChanges(),
-        builder: (context, snapshot) {
-          if (!snapshot.hasData) {
-            return const HomePageController();
-          } else {
-            return const AuthPage();
-          }
-        },
-      );
+      return null;
     } on FirebaseAuthException catch (e) {
       if (e.code == 'user-not-found') {
         print('No user found for that email.');
@@ -58,7 +51,6 @@ class AuthServices {
     if (userCredential != null) {
       DatabaseMethods()
           .addUserInfotoDB(_firebaseAuth.currentUser!.uid, userModel);
-      print(userModel);
     }
   }
 

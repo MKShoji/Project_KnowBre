@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:knowbre/pages/home/home_page_controller.dart';
+import 'package:knowbre/shared/services/auth_controller.dart';
 import 'package:knowbre/shared/services/auth_services.dart';
 import 'package:knowbre/shared/themes/app_colors.dart';
 import 'package:sign_in_button/sign_in_button.dart';
@@ -15,6 +16,8 @@ class AuthPage extends StatefulWidget {
 
 class _AuthPageState extends State<AuthPage> {
   final _formKey = GlobalKey<FormState>();
+
+  final authController = AuthController();
 
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
@@ -139,10 +142,7 @@ class _AuthPageState extends State<AuthPage> {
                 .signIn(
                     email: _emailController.text,
                     password: _passwordController.text)
-                .then((value) {
-              Navigator.pushNamedAndRemoveUntil(
-                  context, '/home', (route) => false);
-            });
+                .then((value) {});
           }
         },
         padding: const EdgeInsets.all(15.0),
