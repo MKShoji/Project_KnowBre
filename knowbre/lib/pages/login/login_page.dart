@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:knowbre/pages/home/home_page_controller.dart';
 import 'package:knowbre/shared/services/auth_controller.dart';
-import 'package:knowbre/shared/services/auth_services.dart';
 import 'package:knowbre/shared/themes/app_colors.dart';
 import 'package:sign_in_button/sign_in_button.dart';
 
@@ -138,7 +137,7 @@ class _AuthPageState extends State<AuthPage> {
       child: RaisedButton(
         onPressed: () {
           if (_formKey.currentState!.validate() == true) {
-            AuthServices()
+            AuthController()
                 .signIn(
                     email: _emailController.text,
                     password: _passwordController.text)

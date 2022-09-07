@@ -2,7 +2,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:knowbre/shared/models/user.dart';
 import 'package:knowbre/shared/services/auth_controller.dart';
-import 'package:knowbre/shared/services/auth_services.dart';
 
 class DatabaseMethods {
   FirebaseFirestore firebaseFirestore = FirebaseFirestore.instance;
@@ -19,10 +18,5 @@ class DatabaseMethods {
         .collection("users")
         .doc(uid)
         .update(userModel.toJson());
-  }
-
-  Future<UserModel> getUserfromDB(String uid) {
-    return firebaseFirestore.collection("users").doc(uid).get().then(
-        (documentSnapshot) => UserModel.fromMap(documentSnapshot.data()!));
   }
 }

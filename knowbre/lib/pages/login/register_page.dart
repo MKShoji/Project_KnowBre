@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:knowbre/pages/login/next_register_page.dart';
-import 'package:knowbre/shared/services/auth_services.dart';
+import 'package:knowbre/shared/services/auth_controller.dart';
 import 'package:knowbre/shared/themes/app_colors.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:knowbre/shared/utilities/constants.dart';
@@ -204,7 +204,7 @@ class _RegisterPageState extends State<RegisterPage> {
         onPressed: () {
           if (_formKey.currentState!.validate() == true) {
             try {
-              AuthServices()
+              AuthController()
                   .createUserWithEmailAndPassword(emailController.text,
                       passwordController.text, nameController.text)
                   .then((value) => {

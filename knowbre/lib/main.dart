@@ -25,29 +25,30 @@ class _MyAppState extends State<MyApp> {
   final Future<FirebaseApp> _initialization = Firebase.initializeApp();
   @override
   Widget build(BuildContext context) {
-    return GetMaterialApp(
-      home: FutureBuilder(
-          future: _initialization,
-          builder: (context, snapshot) {
-            if (snapshot.hasError) {
-              return const Material(
-                child: Center(
-                  child: Text(
-                    "Não foi possível inicializar o Firebase",
-                    textDirection: TextDirection.ltr,
-                  ),
+    return FutureBuilder(
+        future: _initialization,
+        builder: (context, snapshot) {
+          if (snapshot.hasError) {
+            return const Material(
+              child: Center(
+                child: Text(
+                  "Não foi possível inicializar o Firebase",
+                  textDirection: TextDirection.ltr,
                 ),
-              );
-            } else if (snapshot.connectionState == ConnectionState.done) {
-              return const AppWidget();
-            } else {
-              return const Material(
-                child: Center(
-                  child: CircularProgressIndicator(),
-                ),
-              );
-            }
-          }),
-    );
+              ),
+            );
+          } else if (snapshot.connectionState == ConnectionState.done) {
+            return GetMaterialApp(
+              initialRoute: "/",
+              getPages: AppWidget.routes,
+            );
+          } else {
+            return const Material(
+              child: Center(
+                child: CircularProgressIndicator(),
+              ),
+            );
+          }
+        });
   }
 }
