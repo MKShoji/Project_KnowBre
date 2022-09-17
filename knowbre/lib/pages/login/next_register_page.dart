@@ -2,6 +2,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutterfire_ui/auth.dart';
+import 'package:knowbre/shared/constants/controllers.dart';
+import 'package:knowbre/shared/models/models.dart';
 import 'package:knowbre/shared/services/database.dart';
 import 'package:knowbre/shared/themes/app_colors.dart';
 import 'package:brasil_fields/brasil_fields.dart';
@@ -122,7 +124,18 @@ class _NextRegisterPageState extends State<NextRegisterPage> {
       width: double.infinity,
       child: RaisedButton(
         onPressed: () {
-          if (_formKey.currentState!.validate() == true) {}
+          if (_formKey.currentState!.validate() == true) {
+            DatabaseMethods()
+                .firebaseFirestore
+                .collection("users")
+                .doc(authController.user?.uid)
+                .update({
+              'apelido': apelidoController.text,
+              'dateNasc': dataController.text
+            }).then(
+              ((value) => Navigator.pushReplacementNamed(context, '/home')),
+            );
+          }
         },
         padding: const EdgeInsets.all(15.0),
         color: AppColor.primary,

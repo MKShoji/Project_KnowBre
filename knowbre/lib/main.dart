@@ -9,8 +9,10 @@ Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
-  );
-  Get.put<AuthController>(AuthController());
+  ).then((value) {
+    Get.put(AuthController());
+  });
+
   runApp(const MyApp());
 }
 

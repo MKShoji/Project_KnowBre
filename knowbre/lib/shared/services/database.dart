@@ -12,11 +12,4 @@ class DatabaseMethods {
         .doc(uid)
         .set(userModel.toJson());
   }
-
-  Future updateUserInfotoDB(String uid, UserModel userModel) {
-    return firebaseFirestore
-        .collection("users")
-        .doc(uid)
-        .update(userModel.toJson());
-  }
 }

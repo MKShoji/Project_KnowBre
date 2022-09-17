@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:knowbre/pages/cursos/cursos_page.dart';
 import 'package:knowbre/pages/favoritos/favoritos_page.dart';
+import 'package:knowbre/shared/constants/controllers.dart';
 import 'package:knowbre/shared/models/user.dart';
 import 'package:knowbre/shared/services/auth_controller.dart';
 import 'package:knowbre/shared/services/database.dart';
@@ -40,9 +41,9 @@ class _HomePageControllerState extends State<HomePageController> {
             currentAccountPicture: const CircleAvatar(
               backgroundColor: AppColor.primary,
             ),
-            accountName: Text('Nome'),
-            accountEmail:
-                Text(AuthController().user.email ?? 'email.exm@exemplo.com'),
+            accountName:
+                Text(authController.firestoreUser.value?.nome ?? "Nome"),
+            accountEmail: Text(authController.user?.email ?? "email"),
           ),
           ListTile(
             dense: true,

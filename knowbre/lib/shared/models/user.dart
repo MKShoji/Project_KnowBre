@@ -3,15 +3,14 @@ import 'dart:convert';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class UserModel {
-  final String uid;
+  final String? uid;
   final String? photoURL;
-  final String email;
-  final String nome;
-  final DateTime? creationTime;
-  final String bio;
-  final String formacao;
-  final String apelido;
-  final String dataNasc;
+  final String? email;
+  final String? nome;
+  final String? bio;
+  final String? formacao;
+  final String? apelido;
+  final String? dataNasc;
 
   UserModel({
     required this.uid,
@@ -19,7 +18,6 @@ class UserModel {
     required this.email,
     required this.photoURL,
     required this.apelido,
-    required this.creationTime,
     required this.bio,
     required this.formacao,
     required this.dataNasc,
@@ -28,10 +26,9 @@ class UserModel {
   factory UserModel.fromMap(Map data) {
     return UserModel(
       email: data['email'],
-      nome: data['name'],
+      nome: data['nome'],
       photoURL: data['photoURL'],
       uid: data['uid'],
-      creationTime: data['creationTime'],
       formacao: data['formacao'],
       bio: data['bio'],
       apelido: data['apelido'],
@@ -40,14 +37,13 @@ class UserModel {
   }
   Map<String, dynamic> toJson() => {
         "email": email,
-        "name": nome,
+        "nome": nome,
         "photoURL": photoURL,
         "uid": uid,
-        "idade": creationTime,
         "formacao": formacao,
         "bio": bio,
         "apelido": apelido,
-        "date": dataNasc,
+        "dateNasc": dataNasc,
       };
   static UserModel fromSnap(DocumentSnapshot snap) {
     var snapshot = snap.data() as Map<String, dynamic>;
@@ -57,7 +53,6 @@ class UserModel {
       photoURL: snapshot['photoURL'],
       apelido: snapshot['apelido'],
       bio: snapshot['bio'],
-      creationTime: snapshot['cretionTime'],
       dataNasc: snapshot['dataNasc'],
       formacao: snapshot['formacao'],
       uid: snapshot['uid'],

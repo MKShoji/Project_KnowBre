@@ -11,20 +11,27 @@ import 'package:shared_preferences/shared_preferences.dart';
 class AuthController extends GetxController {
   static AuthController instance = Get.find();
   final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
-  late Rx<User?> _user;
-  late Rxn<model.UserModel> _userFirestore;
+  Rxn<User?> _user = Rxn<User?>();
+  Rxn<model.UserModel> firestoreUser = Rxn<model.UserModel>();
 
-  User get user => _user.value!;
+  User? get user => _user.value;
 
   @override
   void onReady() async {
     super.onReady();
-    _user = Rx<User?>(_firebaseAuth.currentUser);
+    _user = Rxn<User?>(_firebaseAuth.currentUser);
     _user.bindStream(_firebaseAuth.authStateChanges());
     ever(_user, _setInitialScreen);
   }
 
   _setInitialScreen(User? user) {
+    if (user?.uid != null) {
+      firestoreUser.bindStream(streamFirestoreUser());
+      getUser.then(
+        (value) => user,
+      );
+    }
+
     if (user == null) {
       Get.offAll(() => const WelcomePage());
     } else {
@@ -32,12 +39,14 @@ class AuthController extends GetxController {
     }
   }
 
+  Future<User?> get getUser async => _firebaseAuth.currentUser;
+
   Stream<model.UserModel> streamFirestoreUser() {
     print('streamFirestoreUser()');
 
     return DatabaseMethods()
         .firebaseFirestore
-        .doc('/users/${user.uid}')
+        .doc('/users/${_user.value!.uid}')
         .snapshots()
         .map((snapshot) => model.UserModel.fromMap(snapshot.data()!));
   }
@@ -45,7 +54,7 @@ class AuthController extends GetxController {
   Future<model.UserModel> getFirestoreUser() {
     return DatabaseMethods()
         .firebaseFirestore
-        .doc('/users/${user.uid}')
+        .doc('/users/${user!.uid}')
         .get()
         .then((documentSnapshot) =>
             model.UserModel.fromMap(documentSnapshot.data()!));
@@ -79,7 +88,6 @@ class AuthController extends GetxController {
       dataNasc: '',
       email: email,
       formacao: '',
-      creationTime: userCredential.user?.metadata.creationTime,
       nome: nome,
       photoURL: '',
       uid: userCredential.user!.uid,
