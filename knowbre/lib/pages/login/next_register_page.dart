@@ -1,7 +1,10 @@
+import 'dart:io';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutterfire_ui/auth.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:knowbre/shared/constants/controllers.dart';
 import 'package:knowbre/shared/models/models.dart';
 import 'package:knowbre/shared/services/database.dart';
@@ -18,6 +21,9 @@ class NextRegisterPage extends StatefulWidget {
 class _NextRegisterPageState extends State<NextRegisterPage> {
   final _formKey = GlobalKey<FormState>();
 
+  XFile? photo;
+  final ImagePicker _picker = ImagePicker();
+
   final apelidoController = TextEditingController();
   final dataController = TextEditingController(
       text: UtilData.obterDataDDMMAAAA(DateTime(2022, 12, 31)));
@@ -28,6 +34,26 @@ class _NextRegisterPageState extends State<NextRegisterPage> {
       style: TextStyle(
         fontSize: 32,
         color: AppColor.primary,
+      ),
+    );
+  }
+
+  Widget _profilePick() {
+    return GestureDetector(
+      onTap: () {
+        pickImage();
+      },
+      child: CircleAvatar(
+        radius: 100,
+        backgroundColor: AppColor.profilePick,
+        backgroundImage: photo != null ? FileImage(File(photo!.path)) : null,
+        child: photo == null
+            ? const Icon(
+                Icons.add_a_photo,
+                color: AppColor.profilePickIcon,
+                size: 60,
+              )
+            : null,
       ),
     );
   }
@@ -123,15 +149,18 @@ class _NextRegisterPageState extends State<NextRegisterPage> {
       padding: const EdgeInsets.symmetric(vertical: 25.0),
       width: double.infinity,
       child: RaisedButton(
-        onPressed: () {
+        onPressed: () async {
           if (_formKey.currentState!.validate() == true) {
+            await uploadPfp().then((value) async {});
+            String value = await getDownload();
             DatabaseMethods()
                 .firebaseFirestore
                 .collection("users")
                 .doc(authController.user?.uid)
                 .update({
               'apelido': apelidoController.text,
-              'dateNasc': dataController.text
+              'dateNasc': dataController.text,
+              'photoURL': value != null ? value : "",
             }).then(
               ((value) => Navigator.pushReplacementNamed(context, '/home')),
             );
@@ -218,10 +247,7 @@ class _NextRegisterPageState extends State<NextRegisterPage> {
                           const SizedBox(
                             height: 15.0,
                           ),
-                          const CircleAvatar(
-                            radius: 100,
-                            backgroundColor: Colors.grey,
-                          ),
+                          _profilePick(),
                           const SizedBox(
                             height: 15.0,
                           ),
@@ -246,5 +272,29 @@ class _NextRegisterPageState extends State<NextRegisterPage> {
         ),
       ),
     );
+  }
+
+  Future pickImage() async {
+    photo = await _picker.pickImage(source: ImageSource.gallery);
+    setState(() {});
+  }
+
+  Future<void> uploadPfp() async {
+    File uploadFile = File(photo!.path);
+
+    try {
+      await firebaseStorage.ref('/fotos/profilePic/${uploadFile.path}').putFile(
+          uploadFile != null ? uploadFile : File('assets/default_avatar.png'));
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  Future<String> getDownload() async {
+    File uploadedFile = File(photo!.path);
+
+    return firebaseStorage
+        .ref('/fotos/profilePic/${uploadedFile.path}')
+        .getDownloadURL();
   }
 }

@@ -38,8 +38,9 @@ class _HomePageControllerState extends State<HomePageController> {
       drawer: Drawer(
         child: ListView(children: [
           UserAccountsDrawerHeader(
-            currentAccountPicture: const CircleAvatar(
-              backgroundColor: AppColor.primary,
+            currentAccountPicture: CircleAvatar(
+              backgroundImage:
+                  NetworkImage(authController.firestoreUser.value!.photoURL),
             ),
             accountName:
                 Text(authController.firestoreUser.value?.nome ?? "Nome"),

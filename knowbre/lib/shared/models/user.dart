@@ -4,7 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 class UserModel {
   final String? uid;
-  final String? photoURL;
+  final String photoURL;
   final String? email;
   final String? nome;
   final String? bio;
