@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:knowbre/shared/services/auth_controller.dart';
 import 'package:knowbre/shared/themes/app_colors.dart';
 
 class ForgotPasswordPage extends StatefulWidget {
@@ -9,6 +10,10 @@ class ForgotPasswordPage extends StatefulWidget {
 }
 
 class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
+  final _formkey = GlobalKey<FormState>();
+
+  final _emailResetController = TextEditingController();
+
   Widget _titleLogin() {
     return const Text(
       "Esqueci minha senha",
@@ -32,23 +37,52 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
     );
   }
 
-  Widget _redefineBtn(AppColor1, AppColor2, String text) {
+  Widget _redefineBtn() {
     return Container(
       padding: const EdgeInsets.symmetric(vertical: 10.0),
       width: double.infinity,
       child: RaisedButton(
         onPressed: () {
-          if (text == 'Voltar') {
-            Navigator.pushReplacementNamed(context, "/login");
+          if (_formkey.currentState!.validate() == true) {
+            AuthController()
+                .resetPassword(email: _emailResetController.text)
+                .then((value) {
+              print('Resetar Senha');
+            });
           }
         },
         padding: const EdgeInsets.all(15.0),
-        color: AppColor1,
+        color: AppColor.primary,
         shape: Border.all(color: AppColor.primary),
-        child: Text(
-          text,
+        child: const Text(
+          'Redefinir Senha',
           style: TextStyle(
-            color: AppColor2,
+            color: AppColor.background,
+            letterSpacing: 1.5,
+            fontSize: 20.0,
+            fontWeight: FontWeight.bold,
+            fontFamily: 'Montserrat',
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _voltarBtn() {
+    return Container(
+      padding: const EdgeInsets.symmetric(vertical: 10.0),
+      width: double.infinity,
+      child: RaisedButton(
+        onPressed: () {
+          Navigator.pushReplacementNamed(context, "/login");
+        },
+        padding: const EdgeInsets.all(15.0),
+        color: AppColor.background,
+        shape: Border.all(color: AppColor.primary),
+        child: const Text(
+          'Voltar',
+          style: TextStyle(
+            color: AppColor.primary,
             letterSpacing: 1.5,
             fontSize: 20.0,
             fontWeight: FontWeight.bold,
@@ -77,6 +111,19 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
           height: 50.0,
           child: TextFormField(
             keyboardType: TextInputType.emailAddress,
+            controller: _emailResetController,
+            validator: ((value) {
+              if (value!.isEmpty) {
+                return "Por favor preencha o campo email";
+              }
+              if (!RegExp("^[a-zA-Z0-9+_.-]+@[a-zA-Z0-9.-]+.[a-z]")
+                  .hasMatch(value)) {
+                return ("Please Enter a valid email");
+              }
+            }),
+            onSaved: (value) {
+              _emailResetController.text = value!;
+            },
             decoration: const InputDecoration(
               suffixIcon: Icon(Icons.check_circle),
               border: OutlineInputBorder(),
@@ -94,25 +141,27 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
     return Scaffold(
       backgroundColor: Colors.white,
       body: SafeArea(
-        child: Padding(
-          padding: EdgeInsets.fromLTRB(20, 20, 30, 30),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              _titleLogin(),
-              const SizedBox(
-                height: 20.0,
-              ),
-              _textHeader(),
-              const SizedBox(
-                height: 20.0,
-              ),
-              _textFieldFormEmail(),
-              Spacer(),
-              _redefineBtn(
-                  AppColor.primary, AppColor.background, 'Redefinir senha'),
-              _redefineBtn(AppColor.background, AppColor.primary, 'Voltar'),
-            ],
+        child: Form(
+          key: _formkey,
+          child: Padding(
+            padding: EdgeInsets.fromLTRB(20, 20, 30, 30),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                _titleLogin(),
+                const SizedBox(
+                  height: 20.0,
+                ),
+                _textHeader(),
+                const SizedBox(
+                  height: 20.0,
+                ),
+                _textFieldFormEmail(),
+                Spacer(),
+                _redefineBtn(),
+                _voltarBtn(),
+              ],
+            ),
           ),
         ),
       ),
