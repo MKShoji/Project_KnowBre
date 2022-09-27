@@ -1,6 +1,4 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutterfire_ui/auth.dart';
 import 'package:knowbre/shared/themes/app_images.dart';
 import 'package:sign_in_button/sign_in_button.dart';
 
