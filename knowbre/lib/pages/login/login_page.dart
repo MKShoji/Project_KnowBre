@@ -234,7 +234,9 @@ class _AuthPageState extends State<AuthPage> {
                   ),
                   SignInButton(
                     Buttons.googleDark,
-                    onPressed: () {},
+                    onPressed: () {
+                      AuthController().googleSignIn();
+                    },
                   ),
                   const SizedBox(
                     height: 20.0,

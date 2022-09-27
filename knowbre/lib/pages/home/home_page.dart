@@ -16,6 +16,10 @@ class _HomePageState extends State<HomePage> {
     await AuthController().signOut();
   }
 
+  Future<void> siginOutGoogle() async {
+    await AuthController().signOutGoogle();
+  }
+
   Widget _title() {
     return const Text("Home");
   }
@@ -25,6 +29,11 @@ class _HomePageState extends State<HomePage> {
       onPressed: siginOut,
       child: const Text("Sign Out"),
     );
+  }
+
+  Widget _signOutGoogleButton() {
+    return ElevatedButton(
+        onPressed: siginOutGoogle, child: const Text("Sign Out Google"));
   }
 
   @override
@@ -39,6 +48,7 @@ class _HomePageState extends State<HomePage> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             _signOutButton(),
+            _signOutGoogleButton(),
           ],
         ),
       ),

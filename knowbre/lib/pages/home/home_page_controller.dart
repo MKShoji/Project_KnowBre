@@ -39,8 +39,9 @@ class _HomePageControllerState extends State<HomePageController> {
         child: ListView(children: [
           UserAccountsDrawerHeader(
             currentAccountPicture: CircleAvatar(
-              backgroundImage: NetworkImage(
-                  'https://firebasestorage.googleapis.com/v0/b/knowbre-database.appspot.com/o/fotos%2FprofilePic%2Fdata%2Fuser%2F0%2Fcom.example.knowbre%2Fcache%2Fimage_picker2891959324239634366.jpg?alt=media&token=0bbc6d80-8c0c-4a9c-b6bc-a3de6623737c'),
+              backgroundImage: NetworkImage(authController
+                      .firestoreUser.value?.photoURL ??
+                  "https://www.zohowebstatic.com/sites/default/files/show/avatar_image.png"),
             ),
             accountName:
                 Text(authController.firestoreUser.value?.nome ?? "Nome"),

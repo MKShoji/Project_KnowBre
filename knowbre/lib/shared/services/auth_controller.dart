@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:knowbre/pages/home/home_page_controller.dart';
 import 'package:knowbre/pages/login/welcome_page.dart';
 import 'package:knowbre/shared/models/user.dart' as model;
@@ -108,5 +109,46 @@ class AuthController extends GetxController {
 
   Future<void> signOut() async {
     await _firebaseAuth.signOut();
+  }
+
+  Future<User?> googleSignIn() async {
+    try {
+      GoogleSignInAccount? googleSignInAccount = await GoogleSignIn().signIn();
+      GoogleSignInAuthentication? googleAuth =
+          await googleSignInAccount?.authentication;
+
+      final AuthCredential credential = GoogleAuthProvider.credential(
+          accessToken: googleAuth?.accessToken, idToken: googleAuth?.idToken);
+
+      UserCredential result =
+          await FirebaseAuth.instance.signInWithCredential(credential);
+      User? googleUser = result.user;
+
+      model.UserModel userModel = model.UserModel(
+        apelido: '',
+        bio: '',
+        dataNasc: '',
+        email: googleUser?.email,
+        formacao: '',
+        nome: googleUser?.displayName,
+        photoURL: googleUser?.photoURL,
+        uid: googleUser?.uid,
+      );
+
+      if (result != null) {
+        DatabaseMethods().addUserInfotoDB(result.user!.uid, userModel);
+      }
+
+      return user;
+    } catch (error) {
+      print(error);
+      return null;
+    }
+  }
+
+  Future<void> signOutGoogle() async {
+    await _firebaseAuth.signOut();
+    GoogleSignIn _googleSignIn = GoogleSignIn();
+    await _googleSignIn.disconnect();
   }
 }
