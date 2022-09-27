@@ -1,8 +1,13 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:knowbre/pages/cursos/cursos_page.dart';
 import 'package:knowbre/pages/favoritos/favoritos_page.dart';
-import 'package:knowbre/shared/auth/auth_services.dart';
+import 'package:knowbre/shared/constants/controllers.dart';
+import 'package:knowbre/shared/models/user.dart';
+import 'package:knowbre/shared/services/auth_controller.dart';
+import 'package:knowbre/shared/services/database.dart';
+import 'package:knowbre/shared/themes/app_colors.dart';
 
 import '../search/search_page.dart';
 import 'home_page.dart';
@@ -15,7 +20,6 @@ class HomePageController extends StatefulWidget {
 }
 
 class _HomePageControllerState extends State<HomePageController> {
-  final User? user = AuthServices().currentUser;
   int currentTab = 0;
 
   final List<Widget> screens = [
@@ -35,19 +39,20 @@ class _HomePageControllerState extends State<HomePageController> {
         child: ListView(children: [
           UserAccountsDrawerHeader(
             currentAccountPicture: CircleAvatar(
-              backgroundImage: NetworkImage(user?.photoURL ?? ''),
+              backgroundImage: NetworkImage(authController
+                      .firestoreUser.value?.photoURL ??
+                  "https://www.zohowebstatic.com/sites/default/files/show/avatar_image.png"),
             ),
-            accountName: Text(user?.displayName ?? "User name"),
-            accountEmail: Text(user?.email ?? "User email"),
+            accountName:
+                Text(authController.firestoreUser.value?.nome ?? "Nome"),
+            accountEmail: Text(authController.user?.email ?? "email"),
           ),
           ListTile(
             dense: true,
             title: Text('Profile'),
             selected: true,
             trailing: Icon(Icons.person),
-            onTap: () {
-              Navigator.popAndPushNamed(context, '/profile');
-            },
+            onTap: () {},
           ),
         ]),
       ),
