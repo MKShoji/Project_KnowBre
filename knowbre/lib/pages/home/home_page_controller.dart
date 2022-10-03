@@ -1,12 +1,9 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:knowbre/pages/cursos/cursos_page.dart';
 import 'package:knowbre/pages/favoritos/favoritos_page.dart';
+import 'package:knowbre/pages/profile/profile_page.dart';
 import 'package:knowbre/shared/constants/controllers.dart';
-import 'package:knowbre/shared/models/user.dart';
-import 'package:knowbre/shared/services/auth_controller.dart';
-import 'package:knowbre/shared/services/database.dart';
 import 'package:knowbre/shared/themes/app_colors.dart';
 
 import '../search/search_page.dart';
@@ -52,11 +49,29 @@ class _HomePageControllerState extends State<HomePageController> {
             title: Text('Profile'),
             selected: true,
             trailing: Icon(Icons.person),
-            onTap: () {},
+            onTap: () {
+              Get.to(
+                () => ProfilePage(),
+                transition: Transition.cupertino,
+              );
+            },
           ),
         ]),
       ),
-      appBar: AppBar(title: const Text("Knowbre")),
+      appBar: AppBar(
+        title: const Text(
+          "Knowbre",
+          style: TextStyle(
+            color: AppColor.primary,
+            fontSize: 18,
+          ),
+        ),
+        backgroundColor: AppColor.background,
+        iconTheme: IconThemeData(color: AppColor.primary),
+        toolbarHeight: 40,
+        shadowColor: AppColor.background,
+        elevation: 1,
+      ),
       body: PageStorage(
         bucket: bucket,
         child: currentScreen,

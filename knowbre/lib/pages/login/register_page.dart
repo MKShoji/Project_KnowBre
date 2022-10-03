@@ -60,7 +60,7 @@ class _RegisterPageState extends State<RegisterPage> {
               nameController.text = value!;
             },
             decoration: const InputDecoration(
-              suffixIcon: Icon(Icons.check_circle),
+              suffixIcon: Icon(Icons.person),
               border: OutlineInputBorder(),
               enabledBorder: OutlineInputBorder(
                   borderSide: BorderSide(color: AppColor.primary)),
@@ -102,7 +102,7 @@ class _RegisterPageState extends State<RegisterPage> {
             },
             controller: emailController,
             decoration: const InputDecoration(
-              suffixIcon: Icon(Icons.check_circle),
+              suffixIcon: Icon(Icons.email_outlined),
               border: OutlineInputBorder(),
               enabledBorder: OutlineInputBorder(
                   borderSide: BorderSide(color: AppColor.primary)),
@@ -145,7 +145,7 @@ class _RegisterPageState extends State<RegisterPage> {
               passwordController.text = value!;
             },
             decoration: const InputDecoration(
-              suffixIcon: Icon(Icons.check_circle),
+              suffixIcon: Icon(Icons.password),
               border: OutlineInputBorder(),
               enabledBorder: OutlineInputBorder(
                   borderSide: BorderSide(color: AppColor.primary)),
@@ -185,7 +185,7 @@ class _RegisterPageState extends State<RegisterPage> {
               confirmPasswordController.text = value!;
             },
             decoration: const InputDecoration(
-              suffixIcon: Icon(Icons.check_circle),
+              suffixIcon: Icon(Icons.check),
               border: OutlineInputBorder(),
               enabledBorder: OutlineInputBorder(
                   borderSide: BorderSide(color: AppColor.primary)),

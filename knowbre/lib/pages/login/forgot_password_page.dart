@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:knowbre/shared/services/auth_controller.dart';
 import 'package:knowbre/shared/themes/app_colors.dart';
 
@@ -46,9 +47,7 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
           if (_formkey.currentState!.validate() == true) {
             AuthController()
                 .resetPassword(email: _emailResetController.text)
-                .then((value) {
-              print('Resetar Senha');
-            });
+                .then((value) {});
           }
         },
         padding: const EdgeInsets.all(15.0),
@@ -74,7 +73,7 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
       width: double.infinity,
       child: RaisedButton(
         onPressed: () {
-          Navigator.pushReplacementNamed(context, "/login");
+          Get.back();
         },
         padding: const EdgeInsets.all(15.0),
         color: AppColor.background,
@@ -140,6 +139,7 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
+      resizeToAvoidBottomInset: false,
       body: SafeArea(
         child: Form(
           key: _formkey,
@@ -157,7 +157,7 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
                   height: 20.0,
                 ),
                 _textFieldFormEmail(),
-                Spacer(),
+                Expanded(child: Container()),
                 _redefineBtn(),
                 _voltarBtn(),
               ],

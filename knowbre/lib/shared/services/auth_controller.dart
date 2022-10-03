@@ -7,7 +7,7 @@ import 'package:knowbre/pages/home/home_page_controller.dart';
 import 'package:knowbre/pages/login/welcome_page.dart';
 import 'package:knowbre/shared/models/user.dart' as model;
 import 'package:knowbre/shared/services/database.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:knowbre/shared/themes/app_colors.dart';
 
 class AuthController extends GetxController {
   static AuthController instance = Get.find();
@@ -34,9 +34,13 @@ class AuthController extends GetxController {
     }
 
     if (user == null) {
-      Get.offAll(() => const WelcomePage());
+      Get.offAll(
+        () => const WelcomePage(),
+        transition: Transition.rightToLeft,
+      );
     } else {
-      Get.offAll(() => const HomePageController());
+      Get.offAll(() => const HomePageController(),
+          transition: Transition.native);
     }
   }
 
@@ -65,12 +69,39 @@ class AuthController extends GetxController {
     try {
       await _firebaseAuth.signInWithEmailAndPassword(
           email: email, password: password);
-      return null;
+      return Get.snackbar(
+        "Login",
+        "Usuário conectado!",
+        icon: Icon(Icons.check_circle_outline, color: AppColor.primary),
+        snackPosition: SnackPosition.BOTTOM,
+        backgroundColor: AppColor.snackBarBackground,
+        colorText: AppColor.background,
+      );
     } on FirebaseAuthException catch (e) {
       if (e.code == 'user-not-found') {
-        print('No user found for that email.');
+        Get.snackbar(
+          "Erro",
+          "Nenhum usuário econtrado",
+          animationDuration: Duration(seconds: 1),
+          backgroundColor: AppColor.snackBarBackground,
+          colorText: AppColor.background,
+          icon: Icon(Icons.error_outline, color: AppColor.primary),
+          snackPosition: SnackPosition.BOTTOM,
+          snackStyle: SnackStyle.GROUNDED,
+          reverseAnimationCurve: Curves.bounceIn,
+        );
       } else if (e.code == 'wrong-password') {
-        print('Wrong password provided for that user.');
+        Get.snackbar(
+          "Erro",
+          "Email ou Senha incorretos",
+          animationDuration: Duration(seconds: 1),
+          backgroundColor: AppColor.snackBarBackground,
+          colorText: AppColor.background,
+          icon: Icon(Icons.error_outline, color: AppColor.primary),
+          snackPosition: SnackPosition.BOTTOM,
+          snackStyle: SnackStyle.GROUNDED,
+          reverseAnimationCurve: Curves.bounceIn,
+        );
       }
     }
   }
@@ -101,9 +132,22 @@ class AuthController extends GetxController {
 
   Future<void> resetPassword({required String email}) async {
     try {
-      return await _firebaseAuth.sendPasswordResetEmail(email: email);
+      await _firebaseAuth.sendPasswordResetEmail(email: email);
+      Get.defaultDialog(
+          title: 'Enviado!',
+          middleText: 'Enviado a notificação para a redefinição da senha');
     } catch (e) {
-      print(e);
+      Get.snackbar(
+        "Erro",
+        "Email não castrado",
+        animationDuration: Duration(seconds: 1),
+        backgroundColor: AppColor.snackBarBackground,
+        colorText: AppColor.background,
+        icon: Icon(Icons.error_outline, color: AppColor.primary),
+        snackPosition: SnackPosition.BOTTOM,
+        snackStyle: SnackStyle.GROUNDED,
+        reverseAnimationCurve: Curves.bounceIn,
+      );
     }
   }
 
@@ -138,6 +182,15 @@ class AuthController extends GetxController {
       if (result != null) {
         DatabaseMethods().addUserInfotoDB(result.user!.uid, userModel);
       }
+
+      Get.snackbar(
+        "Login",
+        "Usuário conectado! (Google)",
+        icon: Icon(Icons.check_circle_outline, color: AppColor.primary),
+        snackPosition: SnackPosition.BOTTOM,
+        backgroundColor: AppColor.snackBarBackground,
+        colorText: AppColor.background,
+      );
 
       return user;
     } catch (error) {

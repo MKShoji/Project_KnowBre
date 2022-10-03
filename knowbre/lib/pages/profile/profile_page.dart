@@ -1,99 +1,192 @@
-// import 'package:firebase_auth/firebase_auth.dart';
-// import 'package:flutter/material.dart';
-// import '../../shared/services/auth_services.dart';
+import 'package:flutter/material.dart';
+import 'package:knowbre/shared/constants/controllers.dart';
+import 'package:knowbre/shared/themes/app_colors.dart';
 
-// class ProfilePage extends StatefulWidget {
-//   const ProfilePage({Key? key}) : super(key: key);
+class ProfilePage extends StatefulWidget {
+  const ProfilePage({Key? key}) : super(key: key);
 
-//   @override
-//   State<ProfilePage> createState() => _ProfilePageState();
-// }
+  @override
+  State<ProfilePage> createState() => _ProfilePageState();
+}
 
-// class _ProfilePageState extends State<ProfilePage> {
-//   final Future<User?> user = AuthServices().getCurrentUser();
+class _ProfilePageState extends State<ProfilePage> {
+  Widget _header() {
+    return Container(
+      width: double.infinity,
+      height: 210,
+      color: AppColor.background,
+      padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
+      child: Column(
+        children: <Widget>[
+          Row(
+            children: [
+              CircleAvatar(
+                backgroundImage: NetworkImage(
+                  authController.firestoreUser.value?.photoURL ??
+                      "https://www.zohowebstatic.com/sites/default/files/show/avatar_image.png",
+                ),
+                radius: 40,
+              ),
+              Expanded(
+                child: Align(
+                  alignment: Alignment.centerRight,
+                  child: SizedBox(
+                    height: 30,
+                    width: 100,
+                    child: TextButton(
+                      style: TextButton.styleFrom(
+                        textStyle: TextStyle(
+                          fontSize: 11,
+                          fontFamily: 'Montserrat',
+                          fontWeight: FontWeight.bold,
+                        ),
+                        backgroundColor: AppColor.primary,
+                        primary: AppColor.background,
+                      ),
+                      onPressed: () {},
+                      child: const Text(
+                        "Editar perfil",
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
+          SizedBox(height: 10),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 10),
+            child: Column(
+              children: <Widget>[
+                Container(
+                  child: Align(
+                    alignment: Alignment.centerLeft,
+                    child: Text(
+                      authController.firestoreUser.value?.nome ??
+                          'Nome completo',
+                      style: TextStyle(
+                          fontSize: 16,
+                          fontFamily: 'Montserrat',
+                          fontWeight: FontWeight.bold,
+                          color: AppColor.primary),
+                    ),
+                  ),
+                ),
+                Container(
+                  child: Align(
+                    alignment: Alignment.centerLeft,
+                    child: Text(
+                      '@usuario',
+                      style: TextStyle(
+                        fontSize: 10,
+                        fontFamily: 'Montserrat',
+                      ),
+                    ),
+                  ),
+                ),
+                SizedBox(
+                  height: 10,
+                ),
+                Container(
+                  child: Align(
+                    alignment: Alignment.centerLeft,
+                    child: RichText(
+                      text: TextSpan(
+                        children: [
+                          WidgetSpan(
+                            child: Icon(
+                              Icons.school_outlined,
+                              color: AppColor.primary,
+                              size: 20.0,
+                            ),
+                          ),
+                          TextSpan(
+                            text: " Universide",
+                            style: TextStyle(
+                              fontSize: 12,
+                              fontFamily: 'Montserrat',
+                              color: Colors.black,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+                Container(
+                  child: Align(
+                    alignment: Alignment.centerLeft,
+                    child: RichText(
+                      text: TextSpan(
+                        children: [
+                          WidgetSpan(
+                            child: Icon(
+                              Icons.location_on_outlined,
+                              color: AppColor.primary,
+                              size: 20.0,
+                            ),
+                          ),
+                          TextSpan(
+                            text: " Local",
+                            style: TextStyle(
+                              fontSize: 12,
+                              fontFamily: 'Montserrat',
+                              color: Colors.black,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+                Container(
+                  child: Align(
+                    alignment: Alignment.centerLeft,
+                    child: RichText(
+                      text: TextSpan(
+                        children: [
+                          WidgetSpan(
+                            child: Icon(
+                              Icons.edit_outlined,
+                              color: AppColor.primary,
+                              size: 20.0,
+                            ),
+                          ),
+                          TextSpan(
+                            text: " Autor de x cards",
+                            style: TextStyle(
+                              fontSize: 12,
+                              fontFamily: 'Montserrat',
+                              color: Colors.black,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
 
-//   // Widget _titlePage() {
-//   //   return const Padding(
-//   //     padding: EdgeInsets.only(
-//   //       top: 10,
-//   //       bottom: 10,
-//   //       left: 16,
-//   //       right: 16,
-//   //     ),
-//   //     child: Text(
-//   //       "Meu perfil",
-//   //       style: TextStyle(
-//   //         fontSize: 26,
-//   //         fontWeight: FontWeight.bold,
-//   //       ),
-//   //     ),
-//   //   );
-//   // }
-
-//   Widget _titleUserName() {
-//     return Padding(
-//         padding: const EdgeInsets.only(top: 1.0, bottom: 5.0),
-//         child: Text(
-//           nome ?? 'User name',
-//           style: const TextStyle(
-//             fontSize: 24,
-//             fontWeight: FontWeight.bold,
-//           ),
-//         ));
-//   }
-
-//   Widget _textField(String labelText, String placeholder) {
-//     return Padding(
-//       padding: const EdgeInsets.symmetric(horizontal: 25.0),
-//       child: TextField(
-//         decoration: InputDecoration(
-//             enabled: false,
-//             labelText: labelText,
-//             labelStyle: const TextStyle(
-//               color: Colors.blueAccent,
-//               fontWeight: FontWeight.bold,
-//             ),
-//             floatingLabelBehavior: FloatingLabelBehavior.always,
-//             hintText: placeholder,
-//             hintStyle: const TextStyle(
-//               color: Colors.black,
-//               fontSize: 16,
-//               fontWeight: FontWeight.bold,
-//             )),
-//       ),
-//     );
-//   }
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return Scaffold(
-//       appBar: AppBar(
-//         centerTitle: true,
-//         title: const Text('Perfil'),
-//       ),
-//       body: SizedBox(
-//         height: double.infinity,
-//         width: double.infinity,
-//         child: Column(
-//           crossAxisAlignment: CrossAxisAlignment.center,
-//           children: <Widget>[
-//             Padding(
-//               padding: const EdgeInsets.only(top: 25, bottom: 10),
-//               child: CircleAvatar(
-//                 radius: 50,
-//                 backgroundImage: NetworkImage(user?.photoURL ?? ''),
-//               ),
-//             ),
-//             _titleUserName(),
-//             _textField("Nome", user?.displayName ?? 'User name'),
-//             _textField("Email", user?.email ?? 'User email'),
-//             _textField("Data de entrada", '${user?.metadata.creationTime}'),
-//             const SizedBox(
-//               height: 30,
-//             ),
-//           ],
-//         ),
-//       ),
-//     );
-//   }
-// }
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: AppColor.background,
+      appBar: AppBar(
+        backgroundColor: AppColor.background,
+        iconTheme: IconThemeData(color: AppColor.primary),
+        toolbarHeight: 40,
+        shadowColor: AppColor.background,
+        elevation: 1,
+      ),
+      body: SingleChildScrollView(
+        child: _header(),
+      ),
+    );
+  }
+}

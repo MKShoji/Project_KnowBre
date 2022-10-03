@@ -179,38 +179,6 @@ class _NextRegisterPageState extends State<NextRegisterPage> {
     );
   }
 
-  Widget _buildSignInButton() {
-    return GestureDetector(
-      onTap: () {
-        Navigator.pushReplacementNamed(context, "/register");
-      },
-      child: Center(
-        child: RichText(
-          text: const TextSpan(
-            children: [
-              TextSpan(
-                text: 'Já possui uma conta? ',
-                style: TextStyle(
-                  color: Color(0xFF4A4A4A),
-                  fontSize: 16.0,
-                  fontWeight: FontWeight.w400,
-                ),
-              ),
-              TextSpan(
-                text: 'Voltar',
-                style: TextStyle(
-                  color: AppColor.primary,
-                  fontSize: 16.0,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -257,7 +225,6 @@ class _NextRegisterPageState extends State<NextRegisterPage> {
                             height: 10.0,
                           ),
                           _registerBtn(),
-                          _buildSignInButton(),
                         ],
                       ),
                     ),

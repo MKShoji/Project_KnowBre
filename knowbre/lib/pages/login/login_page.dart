@@ -1,7 +1,7 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:knowbre/pages/home/home_page_controller.dart';
+import 'package:get/get.dart';
+import 'package:knowbre/pages/login/login.dart';
 import 'package:knowbre/shared/services/auth_controller.dart';
 import 'package:knowbre/shared/themes/app_colors.dart';
 import 'package:sign_in_button/sign_in_button.dart';
@@ -76,7 +76,7 @@ class _AuthPageState extends State<AuthPage> {
             },
             keyboardType: TextInputType.emailAddress,
             decoration: const InputDecoration(
-              suffixIcon: Icon(Icons.check_circle),
+              suffixIcon: Icon(Icons.email_outlined),
               border: OutlineInputBorder(),
               enabledBorder: OutlineInputBorder(
                   borderSide: BorderSide(color: AppColor.primary)),
@@ -119,7 +119,7 @@ class _AuthPageState extends State<AuthPage> {
             },
             obscureText: true,
             decoration: const InputDecoration(
-              suffixIcon: Icon(Icons.check_circle),
+              suffixIcon: Icon(Icons.lock),
               border: OutlineInputBorder(),
               enabledBorder: OutlineInputBorder(
                   borderSide: BorderSide(color: AppColor.primary)),
@@ -163,7 +163,7 @@ class _AuthPageState extends State<AuthPage> {
   Widget _buildSignUpButton() {
     return GestureDetector(
       onTap: () {
-        Navigator.pushReplacementNamed(context, "/register");
+        Get.to(() => RegisterPage(), transition: Transition.rightToLeft);
       },
       child: Center(
         child: RichText(
@@ -197,7 +197,10 @@ class _AuthPageState extends State<AuthPage> {
       alignment: Alignment.centerRight,
       child: FlatButton(
         onPressed: () {
-          Navigator.pushReplacementNamed(context, "/forgot_password");
+          Get.to(
+            () => ForgotPasswordPage(),
+            transition: Transition.cupertino,
+          );
         },
         padding: EdgeInsets.only(right: 0.0),
         child: const Text(
