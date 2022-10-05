@@ -147,7 +147,7 @@ class _AuthPageState extends State<AuthPage> {
         padding: const EdgeInsets.all(15.0),
         color: AppColor.primary,
         child: const Text(
-          'Entar',
+          'Entrar',
           style: TextStyle(
             color: Colors.white,
             letterSpacing: 1.5,

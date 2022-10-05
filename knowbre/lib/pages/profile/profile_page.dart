@@ -101,7 +101,7 @@ class _ProfilePageState extends State<ProfilePage> {
                             ),
                           ),
                           TextSpan(
-                            text: " Universide",
+                            text: " Universidade",
                             style: TextStyle(
                               fontSize: 12,
                               fontFamily: 'Montserrat',
