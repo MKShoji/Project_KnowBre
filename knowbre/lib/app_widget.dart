@@ -8,6 +8,8 @@ import 'package:knowbre/pages/login/welcome_page.dart';
 import 'package:knowbre/pages/profile/profile_page.dart';
 import 'package:knowbre/pages/splash/landing_page.dart';
 
+import 'pages/profile/profile_edit_page.dart';
+
 class AppWidget {
   AppWidget._();
   static final routes = [
@@ -19,5 +21,6 @@ class AppWidget {
     GetPage(name: '/forgot_password', page: () => const ForgotPasswordPage()),
     GetPage(name: '/home', page: () => HomePageController()),
     GetPage(name: '/profile', page: () => ProfilePage()),
+    GetPage(name: '/profile_edit', page: () => ProfileEditPage()),
   ];
 }

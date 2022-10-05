@@ -40,9 +40,24 @@ class _HomePageControllerState extends State<HomePageController> {
                       .firestoreUser.value?.photoURL ??
                   "https://www.zohowebstatic.com/sites/default/files/show/avatar_image.png"),
             ),
-            accountName:
-                Text(authController.firestoreUser.value?.nome ?? "Nome"),
-            accountEmail: Text(authController.user?.email ?? "email"),
+            accountName: Text(
+              authController.firestoreUser.value?.nome ?? "Nome",
+              style: TextStyle(
+                fontSize: 18,
+                fontFamily: 'Montserrat',
+                color: AppColor.primary,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            accountEmail: Text(
+              authController.user?.email ?? "email",
+              style: TextStyle(
+                fontSize: 10,
+                fontFamily: 'Montserrat',
+                color: AppColor.profilePick,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
           ),
           ListTile(
             dense: true,
@@ -77,7 +92,7 @@ class _HomePageControllerState extends State<HomePageController> {
         child: currentScreen,
       ),
       floatingActionButton: FloatingActionButton(
-        child: Icon(Icons.add),
+        child: Icon(Icons.visibility_outlined, size: 30),
         onPressed: () {},
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
@@ -105,14 +120,9 @@ class _HomePageControllerState extends State<HomePageController> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Icon(
-                          Icons.home,
-                          color: currentTab == 0 ? Colors.blue : Colors.grey,
-                        ),
-                        Text(
-                          'Home',
-                          style: TextStyle(
-                            color: currentTab == 0 ? Colors.blue : Colors.grey,
-                          ),
+                          Icons.import_contacts_sharp,
+                          color:
+                              currentTab == 0 ? AppColor.primary : Colors.grey,
                         ),
                       ],
                     ),
@@ -130,13 +140,8 @@ class _HomePageControllerState extends State<HomePageController> {
                       children: [
                         Icon(
                           Icons.search,
-                          color: currentTab == 1 ? Colors.blue : Colors.grey,
-                        ),
-                        Text(
-                          'Search',
-                          style: TextStyle(
-                            color: currentTab == 1 ? Colors.blue : Colors.grey,
-                          ),
+                          color:
+                              currentTab == 1 ? AppColor.primary : Colors.grey,
                         ),
                       ],
                     ),
@@ -159,14 +164,9 @@ class _HomePageControllerState extends State<HomePageController> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Icon(
-                          Icons.school,
-                          color: currentTab == 3 ? Colors.blue : Colors.grey,
-                        ),
-                        Text(
-                          'Cursos',
-                          style: TextStyle(
-                            color: currentTab == 3 ? Colors.blue : Colors.grey,
-                          ),
+                          Icons.newspaper,
+                          color:
+                              currentTab == 3 ? AppColor.primary : Colors.grey,
                         ),
                       ],
                     ),
@@ -183,14 +183,9 @@ class _HomePageControllerState extends State<HomePageController> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Icon(
-                          Icons.star,
-                          color: currentTab == 4 ? Colors.blue : Colors.grey,
-                        ),
-                        Text(
-                          'Favoritos',
-                          style: TextStyle(
-                            color: currentTab == 4 ? Colors.blue : Colors.grey,
-                          ),
+                          Icons.add,
+                          color:
+                              currentTab == 4 ? AppColor.primary : Colors.grey,
                         ),
                       ],
                     ),

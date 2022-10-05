@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:knowbre/pages/profile/profile_contoller.dart';
+import 'package:knowbre/pages/profile/profile_edit_page.dart';
 import 'package:knowbre/shared/constants/controllers.dart';
 import 'package:knowbre/shared/themes/app_colors.dart';
 
@@ -10,6 +13,8 @@ class ProfilePage extends StatefulWidget {
 }
 
 class _ProfilePageState extends State<ProfilePage> {
+  final ProfileController _profileControllerx = Get.put(ProfileController());
+
   Widget _header() {
     return Container(
       width: double.infinity,
@@ -43,7 +48,10 @@ class _ProfilePageState extends State<ProfilePage> {
                         backgroundColor: AppColor.primary,
                         primary: AppColor.background,
                       ),
-                      onPressed: () {},
+                      onPressed: () {
+                        Get.to(() => ProfileEditPage(),
+                            transition: Transition.cupertino);
+                      },
                       child: const Text(
                         "Editar perfil",
                       ),
@@ -184,8 +192,32 @@ class _ProfilePageState extends State<ProfilePage> {
         shadowColor: AppColor.background,
         elevation: 1,
       ),
-      body: SingleChildScrollView(
-        child: _header(),
+      body: Column(
+        children: <Widget>[
+          _header(),
+          Container(
+            child: TabBar(
+              tabs: _profileControllerx.tabs,
+              controller: _profileControllerx.tabController,
+              isScrollable: true,
+              labelColor: AppColor.primary,
+              unselectedLabelColor: Colors.black,
+              indicatorColor: AppColor.primary,
+            ),
+          ),
+          Container(
+            width: double.maxFinite,
+            height: 200,
+            child: TabBarView(
+              children: [
+                Center(child: Text("Meus Cards")),
+                Center(child: Text("Meus videos")),
+                Center(child: Text("Salves")),
+              ],
+              controller: _profileControllerx.tabController,
+            ),
+          ),
+        ],
       ),
     );
   }
