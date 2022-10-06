@@ -33,15 +33,7 @@ class AuthController extends GetxController {
       );
     }
 
-    if (user == null) {
-      Get.offAll(
-        () => const WelcomePage(),
-        transition: Transition.rightToLeft,
-      );
-    } else {
-      Get.offAll(() => const HomePageController(),
-          transition: Transition.native);
-    }
+
   }
 
   Future<User?> get getUser async => _firebaseAuth.currentUser;
