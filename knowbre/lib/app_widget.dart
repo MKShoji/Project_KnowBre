@@ -7,6 +7,7 @@ import 'package:knowbre/pages/login/register_page.dart';
 import 'package:knowbre/pages/login/welcome_page.dart';
 import 'package:knowbre/pages/profile/profile_page.dart';
 import 'package:knowbre/pages/splash/landing_page.dart';
+import 'package:knowbre/shared/widgets/cardPreview_widget.dart';
 
 import 'pages/profile/profile_edit_page.dart';
 
@@ -22,5 +23,6 @@ class AppWidget {
     GetPage(name: '/home', page: () => HomePageController()),
     GetPage(name: '/profile', page: () => ProfilePage()),
     GetPage(name: '/profile_edit', page: () => ProfileEditPage()),
+    GetPage(name: '/card', page: () => CardPreview()),
   ];
 }
