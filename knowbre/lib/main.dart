@@ -41,7 +41,7 @@ class _MyAppState extends State<MyApp> {
             );
           } else if (snapshot.connectionState == ConnectionState.done) {
             return GetMaterialApp(
-              initialRoute: "/welcome",
+              initialRoute: "/home",
               getPages: AppWidget.routes,
             );
           } else {
