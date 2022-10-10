@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get/get.dart';
 
-import 'package:knowbre/shared/models/user.dart';
 import 'package:knowbre/shared/services/auth_controller.dart';
 import 'package:knowbre/shared/themes/app_colors.dart';
 
@@ -14,33 +12,12 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  Future<void> siginOut() async {
-    await AuthController().signOut();
-  }
-
   Future<void> siginOutGoogle() async {
     await AuthController().signOutGoogle();
   }
 
   Widget _title() {
     return const Text("Home");
-  }
-
-  Widget _signOutButton() {
-    return ElevatedButton(
-      onPressed: () {
-        AuthController().signOut();
-        Get.snackbar(
-          "LogOut",
-          "Você foi desconectado",
-          icon: Icon(Icons.check_circle_outline, color: AppColor.primary),
-          snackPosition: SnackPosition.BOTTOM,
-          backgroundColor: AppColor.snackBarBackground,
-          colorText: AppColor.background,
-        );
-      },
-      child: const Text("Sign Out"),
-    );
   }
 
   Widget _signOutGoogleButton() {
@@ -71,7 +48,6 @@ class _HomePageState extends State<HomePage> {
           crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            _signOutButton(),
             _signOutGoogleButton(),
           ],
         ),

@@ -7,7 +7,7 @@ class UserModel {
   final String? photoURL;
   final String? email;
   final String? nome;
-  final String? bio;
+  final String? localizacao;
   final String? formacao;
   final String? apelido;
   final String? dataNasc;
@@ -18,7 +18,7 @@ class UserModel {
     required this.email,
     required this.photoURL,
     required this.apelido,
-    required this.bio,
+    required this.localizacao,
     required this.formacao,
     required this.dataNasc,
   });
@@ -30,7 +30,7 @@ class UserModel {
       photoURL: data['photoURL'],
       uid: data['uid'],
       formacao: data['formacao'],
-      bio: data['bio'],
+      localizacao: data['localizacao'],
       apelido: data['apelido'],
       dataNasc: data['dataNasc'],
     );
@@ -41,7 +41,7 @@ class UserModel {
         "photoURL": photoURL,
         "uid": uid,
         "formacao": formacao,
-        "bio": bio,
+        "bio": localizacao,
         "apelido": apelido,
         "dateNasc": dataNasc,
       };
@@ -52,7 +52,7 @@ class UserModel {
       nome: snapshot['nome'],
       photoURL: snapshot['photoURL'],
       apelido: snapshot['apelido'],
-      bio: snapshot['bio'],
+      localizacao: snapshot['localizacao'],
       dataNasc: snapshot['dataNasc'],
       formacao: snapshot['formacao'],
       uid: snapshot['uid'],

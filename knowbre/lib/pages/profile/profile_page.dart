@@ -109,7 +109,7 @@ class _ProfilePageState extends State<ProfilePage> {
                             ),
                           ),
                           TextSpan(
-                            text: " Universidade",
+                            text: authController.firestoreUser.value?.formacao,
                             style: TextStyle(
                               fontSize: 12,
                               fontFamily: 'Montserrat',
@@ -135,7 +135,8 @@ class _ProfilePageState extends State<ProfilePage> {
                             ),
                           ),
                           TextSpan(
-                            text: " Local",
+                            text:
+                                authController.firestoreUser.value?.localizacao,
                             style: TextStyle(
                               fontSize: 12,
                               fontFamily: 'Montserrat',

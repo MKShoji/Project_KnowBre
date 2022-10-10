@@ -1,5 +1,12 @@
+import 'dart:io';
+
+import 'package:brasil_fields/brasil_fields.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:get/get.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:knowbre/shared/constants/controllers.dart';
+import 'package:knowbre/shared/services/database.dart';
 import 'package:knowbre/shared/themes/app_colors.dart';
 
 class ProfileEditPage extends StatefulWidget {
@@ -10,12 +17,20 @@ class ProfileEditPage extends StatefulWidget {
 }
 
 // O que falta:
-// - Colocar borda no botão
 // - Trocar CircleAvatar por GestureDector
-// - Colocar campo no firebase de formacao
 
 class _ProfileEditPageState extends State<ProfileEditPage> {
   final _formKey = GlobalKey<FormState>();
+
+  XFile? photo;
+  final ImagePicker _picker = ImagePicker();
+
+  final apelidoController = TextEditingController();
+  final dataController = TextEditingController(
+    text: UtilData.obterDataDDMMAAAA(DateTime(2022, 12, 31)),
+  );
+  final formacaoController = TextEditingController();
+  final localizacaoController = TextEditingController();
 
   Widget _header() {
     return Container(
@@ -30,17 +45,27 @@ class _ProfileEditPageState extends State<ProfileEditPage> {
             child: SizedBox(
               height: 30,
               width: 80,
-              child: TextButton(
-                style: TextButton.styleFrom(
-                  textStyle: TextStyle(
-                    fontSize: 12,
-                    fontFamily: 'Montserrat',
-                    fontWeight: FontWeight.bold,
-                  ),
-                  backgroundColor: AppColor.background,
-                  primary: AppColor.primary,
-                ),
-                onPressed: (() {}),
+              child: OutlineButton(
+                textColor: AppColor.primary,
+                onPressed: () async {
+                  if (_formKey.currentState!.validate() == true) {
+                    await uploadPfp().then((value) async {});
+                    String value = await getDownload();
+                    DatabaseMethods()
+                        .firebaseFirestore
+                        .collection("users")
+                        .doc(authController.user?.uid)
+                        .update({
+                      'apelido': apelidoController.text,
+                      'dateNasc': dataController.text,
+                      'formacao': formacaoController.text,
+                      'localizacao': localizacaoController.text,
+                      'photoURL': value != null ? value : "",
+                    }).then(
+                      ((value) => Get.back()),
+                    );
+                  }
+                },
                 child: const Text("Salvar"),
               ),
             ),
@@ -48,12 +73,22 @@ class _ProfileEditPageState extends State<ProfileEditPage> {
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              CircleAvatar(
-                backgroundImage: NetworkImage(
-                  authController.firestoreUser.value?.photoURL ??
-                      "https://www.zohowebstatic.com/sites/default/files/show/avatar_image.png",
+              GestureDetector(
+                onTap: () {
+                  pickImage();
+                },
+                child: CircleAvatar(
+                  backgroundImage:
+                      photo != null ? FileImage(File(photo!.path)) : null,
+                  radius: 50,
+                  child: photo == null
+                      ? const Icon(
+                          Icons.add_a_photo,
+                          color: AppColor.profilePickIcon,
+                          size: 60,
+                        )
+                      : null,
                 ),
-                radius: 50,
               ),
             ],
           ),
@@ -61,7 +96,7 @@ class _ProfileEditPageState extends State<ProfileEditPage> {
           Column(
             children: [
               Text(
-                authController.firestoreUser.value?.nome ?? 'Nome completo',
+                authController.firestoreUser.value?.apelido ?? 'Nome completo',
                 style: TextStyle(
                     fontSize: 20,
                     fontFamily: 'Montserrat',
@@ -84,7 +119,20 @@ class _ProfileEditPageState extends State<ProfileEditPage> {
 
   Widget _textFieldFormEditNome() {
     return TextFormField(
-      initialValue: authController.firestoreUser.value?.nome ?? 'Nome',
+      keyboardType: TextInputType.name,
+      controller: apelidoController,
+      validator: (value) {
+        RegExp regex = RegExp(r'^.{2,}$');
+        if (value!.isEmpty) {
+          return ("Por favor preencher campo obrigatório");
+        }
+        if (!regex.hasMatch(value)) {
+          return ("Nome deve conter pelo menos mais de 2 caracteres");
+        }
+      },
+      onSaved: (value) {
+        apelidoController.text = value!;
+      },
       maxLength: 20,
       decoration: InputDecoration(
         labelText: 'Nome',
@@ -95,12 +143,21 @@ class _ProfileEditPageState extends State<ProfileEditPage> {
       ),
     );
   }
+
   Widget _textFieldFormEditFormacao() {
     return TextFormField(
-      initialValue: authController.firestoreUser.value?.formacao ?? 'Formacao',
-      maxLength: 20,
+      controller: formacaoController,
+      validator: (value) {
+        if (value!.isEmpty) {
+          return ("Por favor preencher campo obrigatório");
+        }
+      },
+      onSaved: (value) {
+        formacaoController.text = value!;
+      },
+      maxLength: 50,
       decoration: InputDecoration(
-        labelText: 'Formcao',
+        labelText: 'Formacao',
         labelStyle: TextStyle(color: AppColor.primary),
         enabledBorder: UnderlineInputBorder(
           borderSide: BorderSide(color: AppColor.primary),
@@ -108,12 +165,47 @@ class _ProfileEditPageState extends State<ProfileEditPage> {
       ),
     );
   }
+
   Widget _textFieldFormEditLocal() {
     return TextFormField(
-      initialValue: authController.firestoreUser.value?.bio ?? 'Localização',
-      maxLength: 20,
+      controller: localizacaoController,
+      validator: (value) {
+        if (value!.isEmpty) {
+          return ("Por favor preencher campo obrigatório");
+        }
+      },
+      onSaved: (value) {
+        localizacaoController.text = value!;
+      },
+      maxLength: 50,
       decoration: InputDecoration(
-        labelText: 'Nome',
+        labelText: 'Localização',
+        labelStyle: TextStyle(color: AppColor.primary),
+        enabledBorder: UnderlineInputBorder(
+          borderSide: BorderSide(color: AppColor.primary),
+        ),
+      ),
+    );
+  }
+
+  Widget _textFieldFormEditDataNasc() {
+    return TextFormField(
+      controller: dataController,
+      validator: (value) {
+        if (value!.isEmpty) {
+          return ("Por favor preencher campo obrigatório");
+        }
+      },
+      onSaved: (value) {
+        dataController.text = value!;
+      },
+      maxLength: 10,
+      inputFormatters: [
+        FilteringTextInputFormatter.digitsOnly,
+        DataInputFormatter(),
+      ],
+      decoration: InputDecoration(
+        labelText: 'Data de nascimento',
         labelStyle: TextStyle(color: AppColor.primary),
         enabledBorder: UnderlineInputBorder(
           borderSide: BorderSide(color: AppColor.primary),
@@ -132,6 +224,14 @@ class _ProfileEditPageState extends State<ProfileEditPage> {
         toolbarHeight: 40,
         shadowColor: AppColor.background,
         elevation: 1,
+        title: const Text(
+          "Editar Perfil",
+          style: TextStyle(
+            color: AppColor.primary,
+            fontSize: 18,
+          ),
+        ),
+        centerTitle: true,
       ),
       body: SafeArea(
         child: SingleChildScrollView(
@@ -148,6 +248,7 @@ class _ProfileEditPageState extends State<ProfileEditPage> {
                       _textFieldFormEditNome(),
                       _textFieldFormEditFormacao(),
                       _textFieldFormEditLocal(),
+                      _textFieldFormEditDataNasc(),
                     ],
                   ),
                 ),
@@ -157,5 +258,29 @@ class _ProfileEditPageState extends State<ProfileEditPage> {
         ),
       ),
     );
+  }
+
+  Future pickImage() async {
+    photo = await _picker.pickImage(source: ImageSource.gallery);
+    setState(() {});
+  }
+
+  Future<void> uploadPfp() async {
+    File uploadFile = File(photo!.path);
+
+    try {
+      await firebaseStorage.ref('/fotos/profilePic/${uploadFile.path}').putFile(
+          uploadFile != null ? uploadFile : File('assets/default_avatar.png'));
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  Future<String> getDownload() async {
+    File uploadedFile = File(photo!.path);
+
+    return firebaseStorage
+        .ref('/fotos/profilePic/${uploadedFile.path}')
+        .getDownloadURL();
   }
 }

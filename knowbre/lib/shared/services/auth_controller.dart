@@ -32,8 +32,15 @@ class AuthController extends GetxController {
         (value) => user,
       );
     }
-
-
+    if (user == null) {
+      Get.offAll(
+        () => const WelcomePage(),
+        transition: Transition.rightToLeft,
+      );
+    } else {
+      Get.offAll(() => const HomePageController(),
+          transition: Transition.native);
+    }
   }
 
   Future<User?> get getUser async => _firebaseAuth.currentUser;
@@ -108,7 +115,7 @@ class AuthController extends GetxController {
 
     model.UserModel userModel = model.UserModel(
       apelido: '',
-      bio: '',
+      localizacao: '',
       dataNasc: '',
       email: email,
       formacao: '',
@@ -162,7 +169,7 @@ class AuthController extends GetxController {
 
       model.UserModel userModel = model.UserModel(
         apelido: '',
-        bio: '',
+        localizacao: '',
         dataNasc: '',
         email: googleUser?.email,
         formacao: '',
