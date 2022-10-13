@@ -206,9 +206,7 @@ class _ProfilePageState extends State<ProfilePage> {
               indicatorColor: AppColor.primary,
             ),
           ),
-          Container(
-            width: double.maxFinite,
-            height: 200,
+          Expanded(
             child: TabBarView(
               children: [
                 Center(child: Text("Meus Cards")),
