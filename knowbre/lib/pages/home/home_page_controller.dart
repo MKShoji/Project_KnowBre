@@ -6,6 +6,7 @@ import 'package:knowbre/pages/profile/profile_page.dart';
 import 'package:knowbre/shared/constants/controllers.dart';
 import 'package:knowbre/shared/services/auth_controller.dart';
 import 'package:knowbre/shared/themes/app_colors.dart';
+import 'package:knowbre/shared/widgets/cardPreview_widget.dart';
 
 import '../search/search_page.dart';
 import 'home_page.dart';
@@ -218,7 +219,7 @@ class _HomePageControllerState extends State<HomePageController> {
                     minWidth: 40,
                     onPressed: () {
                       setState(() {
-                        currentScreen = const FavoritosPage();
+                        currentScreen = const CardPreview();
                         currentTab = 4;
                       });
                     },

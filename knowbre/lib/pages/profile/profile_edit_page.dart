@@ -40,36 +40,36 @@ class _ProfileEditPageState extends State<ProfileEditPage> {
       padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
       child: Column(
         children: [
-          Align(
-            alignment: Alignment.topRight,
-            child: SizedBox(
-              height: 30,
-              width: 80,
-              child: OutlineButton(
-                textColor: AppColor.primary,
-                onPressed: () async {
-                  if (_formKey.currentState!.validate() == true) {
-                    await uploadPfp().then((value) async {});
-                    String value = await getDownload();
-                    DatabaseMethods()
-                        .firebaseFirestore
-                        .collection("users")
-                        .doc(authController.user?.uid)
-                        .update({
-                      'apelido': apelidoController.text,
-                      'dateNasc': dataController.text,
-                      'formacao': formacaoController.text,
-                      'localizacao': localizacaoController.text,
-                      'photoURL': value != null ? value : "",
-                    }).then(
-                      ((value) => Get.back()),
-                    );
-                  }
-                },
-                child: const Text("Salvar"),
-              ),
-            ),
-          ),
+          // Align(
+          //   alignment: Alignment.topRight,
+          //   child: SizedBox(
+          //     height: 30,
+          //     width: 80,
+          //     child: OutlineButton(
+          //       textColor: AppColor.primary,
+          //       onPressed: () async {
+          //         if (_formKey.currentState!.validate() == true) {
+          //           await uploadPfp().then((value) async {});
+          //           String value = await getDownload();
+          //           DatabaseMethods()
+          //               .firebaseFirestore
+          //               .collection("users")
+          //               .doc(authController.user?.uid)
+          //               .update({
+          //             'apelido': apelidoController.text,
+          //             'dateNasc': dataController.text,
+          //             'formacao': formacaoController.text,
+          //             'localizacao': localizacaoController.text,
+          //             'photoURL': value != null ? value : "",
+          //           }).then(
+          //             ((value) => Get.back()),
+          //           );
+          //         }
+          //       },
+          //       child: const Text("Salvar"),
+          //     ),
+          //   ),
+          // ),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
