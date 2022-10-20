@@ -45,8 +45,7 @@ class _ProfileEditPageState extends State<ProfileEditPage> {
             child: SizedBox(
               height: 30,
               width: 80,
-              child: OutlineButton(
-                textColor: AppColor.primary,
+              child: ElevatedButton(
                 onPressed: () async {
                   if (_formKey.currentState!.validate() == true) {
                     await uploadPfp().then((value) async {});
