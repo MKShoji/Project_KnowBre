@@ -44,6 +44,7 @@ dependencies:
   image_picker: ^0.8.5+3
   firebase_storage: ^10.3.9
   http: ^0.13.5
+  url_launcher: ^6.1.6
 
 flutter_native_splash:
   color: "#192EFF"
