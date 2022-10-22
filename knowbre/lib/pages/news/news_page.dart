@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:knowbre/shared/services/api_news.dart';
 import 'package:knowbre/shared/themes/app_colors.dart';
 import 'package:knowbre/shared/models/article.dart';
-import 'package:knowbre/shared/services/api_news.dart';
 import 'package:knowbre/shared/widgets/cardNews_widget.dart';
 
 class NewsPage extends StatefulWidget {

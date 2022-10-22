@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:knowbre/pages/favoritos/favoritos_page.dart';
 import 'package:knowbre/pages/news/news_page.dart';
 import 'package:knowbre/pages/profile/profile_page.dart';
+import 'package:knowbre/pages/upload_post/upload_post.dart';
 import 'package:knowbre/shared/constants/controllers.dart';
 import 'package:knowbre/shared/services/auth_controller.dart';
 import 'package:knowbre/shared/themes/app_colors.dart';
@@ -23,7 +23,7 @@ class _HomePageControllerState extends State<HomePageController> {
   final List<Widget> screens = [
     HomePage(),
     const SearchPage(),
-    const FavoritosPage(),
+    const UploadPostPage(),
     const NewsPage(),
   ];
 
@@ -217,10 +217,8 @@ class _HomePageControllerState extends State<HomePageController> {
                   MaterialButton(
                     minWidth: 40,
                     onPressed: () {
-                      setState(() {
-                        currentScreen = const FavoritosPage();
-                        currentTab = 4;
-                      });
+                      Get.to(() => UploadPostPage(),
+                          transition: Transition.cupertino);
                     },
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
