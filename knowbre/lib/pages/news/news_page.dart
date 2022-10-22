@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:knowbre/shared/services/api_news.dart';
 import 'package:knowbre/shared/themes/app_colors.dart';
+import 'package:knowbre/shared/models/article.dart';
+import 'package:knowbre/shared/services/api_news.dart';
 import 'package:knowbre/shared/widgets/cardNews_widget.dart';
 
 class NewsPage extends StatefulWidget {
@@ -10,53 +13,31 @@ class NewsPage extends StatefulWidget {
 }
 
 class _NewsPageState extends State<NewsPage> {
-  final List news = [
-    'Noticía 1',
-    'Noticía 2',
-    'Noticía 3',
-    'Noticía 4',
-  ];
-
-  Widget _tilteNews() {
-    return Padding(
-      padding: const EdgeInsets.all(5.0),
-      child: Container(
-        height: 30,
-        child: const Text(
-          "Noticias",
-          style: TextStyle(
-            fontSize: 26,
-            color: AppColor.primary,
-            fontFamily: "Montserrat",
-          ),
-        ),
-      ),
-    );
-  }
+  ApiService client = ApiService();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColor.background,
-      body: Column(
-        children: [
-          _tilteNews(),
-          Expanded(
-            child: ListView.separated(
-                itemCount: news.length,
-                separatorBuilder: (BuildContext context, int index) =>
-                    const Divider(thickness: 1),
-                itemBuilder: (context, index) {
-                  return CardNews(
-                    child: news[index],
-                  );
-                }),
-          ),
-        ],
+      body: FutureBuilder(
+        future: client.getArticle(),
+        builder: (BuildContext context, AsyncSnapshot<List<Article>> snapshot) {
+          if (snapshot.hasData) {
+            List<Article>? articles = snapshot.data;
+            return ListView.builder(
+                itemCount: articles?.length,
+                itemBuilder: (context, index) =>
+                    customListTile(articles![index]));
+          }
+          return Center(
+            child: CircularProgressIndicator(),
+          );
+        },
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {},
-        child: const Icon(Icons.add),
+        heroTag: "btn1",
+        child: const Icon(Icons.refresh),
       ),
     );
   }
