@@ -23,6 +23,5 @@ class AppWidget {
     GetPage(name: '/home', page: () => HomePageController()),
     GetPage(name: '/profile', page: () => ProfilePage()),
     GetPage(name: '/profile_edit', page: () => ProfileEditPage()),
-    GetPage(name: '/card', page: () => CardPreview()),
   ];
 }

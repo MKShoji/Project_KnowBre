@@ -1,8 +1,13 @@
 import 'dart:io';
 
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:knowbre/pages/home/home.dart';
+import 'package:knowbre/shared/constants/controllers.dart';
 import 'package:knowbre/shared/themes/app_colors.dart';
+import 'package:knowbre/shared/utilities/constants.dart';
 import 'package:knowbre/shared/widgets/cardArticles_widget.dart';
 
 class UploadPostPage extends StatefulWidget {
@@ -16,6 +21,13 @@ class _UploadPostPageState extends State<UploadPostPage> {
   File? banner;
   final _picker = ImagePicker();
 
+  // Controller dos Inputs
+  final _tituloController = TextEditingController();
+  final _descricaoController = TextEditingController();
+
+  bool _isLoading = false;
+  String _blogId = '';
+
   Future pickImage() async {
     final pickedfile = await _picker.pickImage(source: ImageSource.gallery);
     setState(() {
@@ -28,10 +40,43 @@ class _UploadPostPageState extends State<UploadPostPage> {
   }
 
   int value = 1;
-
   _addItem() {
     setState(() {
       value = value + 1;
+    });
+  }
+
+  Future _uploadPost(File? image, String title, String descricao) async {
+    setState(() {
+      _isLoading = true;
+    });
+
+    String id = generateId();
+
+    DatabaseReference reference = await firebaseDatabase;
+    var ref = await firebaseStorage
+        .ref()
+        .child("/fotos")
+        .child("/posts")
+        .child(image!.uri.toString() + ".jpg");
+    var uploadTask = await ref.putFile(image);
+    String downloadUrl = await uploadTask.ref.getDownloadURL();
+
+    Map postData = {
+      'image': downloadUrl,
+      'title': title,
+      'desc': descricao,
+      'numArt': '$value',
+    };
+
+    await reference.child('Blogs').child(id).set(postData).whenComplete(() {
+      setState(() {
+        _isLoading = false;
+      });
+      Get.to(
+        () => HomePageController(),
+        transition: Transition.cupertino,
+      );
     });
   }
 
@@ -40,6 +85,7 @@ class _UploadPostPageState extends State<UploadPostPage> {
       margin: EdgeInsets.symmetric(horizontal: 5),
       child: TextFormField(
         keyboardType: TextInputType.text,
+        controller: _tituloController,
         decoration: InputDecoration(
           labelText: 'Título',
           labelStyle: TextStyle(color: AppColor.primary, fontSize: 12),
@@ -82,12 +128,13 @@ class _UploadPostPageState extends State<UploadPostPage> {
     );
   }
 
-  Widget _textFieldFormFonte() {
+  Widget _textFieldFormDescricao() {
     return Container(
       height: 25,
       margin: EdgeInsets.fromLTRB(2.5, 1, 2.5, 20),
       child: TextFormField(
         keyboardType: TextInputType.text,
+        controller: _descricaoController,
         decoration: InputDecoration(
           hintText: "Autor(a) ou Fonte",
           hintStyle: TextStyle(color: AppColor.profilePickIcon, fontSize: 14),
@@ -125,6 +172,12 @@ class _UploadPostPageState extends State<UploadPostPage> {
         toolbarHeight: 40,
         shadowColor: AppColor.background,
         elevation: 1,
+        actions: <Widget>[
+          IconButton(
+            onPressed: () {},
+            icon: Icon(Icons.send),
+          ),
+        ],
         title: const Text(
           "Criar Post",
           style: TextStyle(
@@ -143,7 +196,7 @@ class _UploadPostPageState extends State<UploadPostPage> {
             children: [
               _textFieldFormTitle(),
               _bannerPost(),
-              _textFieldFormFonte(),
+              _textFieldFormDescricao(),
               articlesList(),
               TextButton.icon(
                 onPressed: _addItem,
