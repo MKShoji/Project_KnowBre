@@ -6,7 +6,7 @@ class UserModel {
   final String? uid;
   final String? photoURL;
   final String? email;
-  final String? nome;
+  final String? username;
   final String? localizacao;
   final String? formacao;
   final String? apelido;
@@ -14,7 +14,7 @@ class UserModel {
 
   UserModel({
     required this.uid,
-    required this.nome,
+    required this.username,
     required this.email,
     required this.photoURL,
     required this.apelido,
@@ -26,7 +26,7 @@ class UserModel {
   factory UserModel.fromMap(Map data) {
     return UserModel(
       email: data['email'],
-      nome: data['nome'],
+      username: data['username'],
       photoURL: data['photoURL'],
       uid: data['uid'],
       formacao: data['formacao'],
@@ -37,7 +37,7 @@ class UserModel {
   }
   Map<String, dynamic> toJson() => {
         "email": email,
-        "nome": nome,
+        "username": username,
         "photoURL": photoURL,
         "uid": uid,
         "formacao": formacao,
@@ -45,17 +45,15 @@ class UserModel {
         "apelido": apelido,
         "dateNasc": dataNasc,
       };
-  static UserModel fromSnap(DocumentSnapshot snap) {
-    var snapshot = snap.data() as Map<String, dynamic>;
+  factory UserModel.fromDocument(DocumentSnapshot doc) {
     return UserModel(
-      email: snapshot['email'],
-      nome: snapshot['nome'],
-      photoURL: snapshot['photoURL'],
-      apelido: snapshot['apelido'],
-      localizacao: snapshot['localizacao'],
-      dataNasc: snapshot['dataNasc'],
-      formacao: snapshot['formacao'],
-      uid: snapshot['uid'],
-    );
+        uid: doc['uid'],
+        username: doc['username'],
+        email: doc['email'],
+        photoURL: doc['photoURL'],
+        apelido: doc['apelido'],
+        localizacao: doc['localizacao'],
+        formacao: doc['formacao'],
+        dataNasc: doc['dataNasc']);
   }
 }

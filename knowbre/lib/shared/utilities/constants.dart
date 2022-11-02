@@ -6,5 +6,5 @@ void showAlert(String massage) {
 }
 
 String generateId() {
-  return Uuid().v1();
+  return Uuid().v4();
 }

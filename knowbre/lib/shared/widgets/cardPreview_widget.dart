@@ -3,10 +3,8 @@ import 'package:knowbre/shared/models/post.dart';
 import '../themes/app_colors.dart';
 
 class CardPreview extends StatelessWidget {
-  final Post data;
   const CardPreview({
     Key? key,
-    required this.data,
   }) : super(key: key);
 
   @override
@@ -31,7 +29,7 @@ class CardPreview extends StatelessWidget {
                       topLeft: Radius.circular(5.0),
                       topRight: Radius.circular(5.0)),
                   child: Image(
-                    image: NetworkImage(data.imagem),
+                    image: NetworkImage(''),
                     filterQuality: FilterQuality.high,
                     width: MediaQuery.of(context).size.width,
                     fit: BoxFit.cover,
@@ -59,13 +57,13 @@ class CardPreview extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(data.titulo,
+                Text('Titulo',
                     style: TextStyle(
                       fontSize: 18,
                       fontWeight: FontWeight.bold,
                     )),
                 SizedBox(height: 10.0),
-                Text(data.descricao,
+                Text('Descricao',
                     style: TextStyle(
                       fontSize: 14,
                       fontWeight: FontWeight.bold,

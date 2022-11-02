@@ -72,7 +72,9 @@ class _HomePageControllerState extends State<HomePageController> {
             trailing: Icon(Icons.person),
             onTap: () {
               Get.to(
-                () => ProfilePage(),
+                () => ProfilePage(
+                  profileId: authController.firebaseAuth.currentUser!.uid,
+                ),
                 transition: Transition.cupertino,
               );
             },

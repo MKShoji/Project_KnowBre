@@ -1,6 +1,8 @@
 import 'dart:io';
 
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
@@ -21,12 +23,14 @@ class _UploadPostPageState extends State<UploadPostPage> {
   File? banner;
   final _picker = ImagePicker();
 
+  final DateTime timestamp = DateTime.now();
+
   // Controller dos Inputs
   final _tituloController = TextEditingController();
   final _descricaoController = TextEditingController();
 
-  bool _isLoading = false;
-  String _blogId = '';
+  bool _isUploading = false;
+  String postId = generateId();
 
   Future pickImage() async {
     final pickedfile = await _picker.pickImage(source: ImageSource.gallery);
@@ -39,6 +43,38 @@ class _UploadPostPageState extends State<UploadPostPage> {
     });
   }
 
+  Future uploadImage(File image) async {
+    var ref = firebaseStorage
+        .ref()
+        .child("/fotos")
+        .child("/posts")
+        .child("post_$postId.jpg");
+    var uploadtask = await ref.putFile(image);
+    String downloadUrl = await uploadtask.ref.getDownloadURL();
+    return downloadUrl;
+  }
+
+  createPostFirestore(
+      {required String mediaUrl,
+      required String title,
+      required String description}) {
+    firebaseFirestore
+        .collection("posts")
+        .doc(authController.firebaseAuth.currentUser!.uid)
+        .collection('userPost')
+        .doc(postId)
+        .set({
+      "postId": postId,
+      "ownerId": authController.firebaseAuth.currentUser!.uid,
+      "username": authController.firestoreUser.value!.username,
+      "mediaUrl": mediaUrl,
+      "title": title,
+      "description": description,
+      "timestamp": timestamp,
+      "likes": {},
+    });
+  }
+
   int value = 1;
   _addItem() {
     setState(() {
@@ -46,37 +82,22 @@ class _UploadPostPageState extends State<UploadPostPage> {
     });
   }
 
-  Future _uploadPost(File? image, String title, String descricao) async {
+  handleSubmit() async {
     setState(() {
-      _isLoading = true;
+      _isUploading = true;
     });
-
-    String id = generateId();
-
-    DatabaseReference reference = await firebaseDatabase;
-    var ref = await firebaseStorage
-        .ref()
-        .child("/fotos")
-        .child("/posts")
-        .child(image!.uri.toString() + ".jpg");
-    var uploadTask = await ref.putFile(image);
-    String downloadUrl = await uploadTask.ref.getDownloadURL();
-
-    Map postData = {
-      'image': downloadUrl,
-      'title': title,
-      'desc': descricao,
-      'numArt': '$value',
-    };
-
-    await reference.child('Blogs').child(id).set(postData).whenComplete(() {
-      setState(() {
-        _isLoading = false;
-      });
-      Get.to(
-        () => HomePageController(),
-        transition: Transition.cupertino,
-      );
+    String mediaUrl = await uploadImage(banner!);
+    createPostFirestore(
+      mediaUrl: mediaUrl,
+      title: _tituloController.text,
+      description: _descricaoController.text,
+    );
+    _tituloController.clear();
+    _descricaoController.clear();
+    setState(() {
+      banner == null;
+      _isUploading = false;
+      postId = generateId();
     });
   }
 
@@ -174,7 +195,7 @@ class _UploadPostPageState extends State<UploadPostPage> {
         elevation: 1,
         actions: <Widget>[
           IconButton(
-            onPressed: () {},
+            onPressed: _isUploading ? null : () => handleSubmit(),
             icon: Icon(Icons.send),
           ),
         ],
@@ -193,7 +214,8 @@ class _UploadPostPageState extends State<UploadPostPage> {
             horizontal: 15,
           ),
           child: Column(
-            children: [
+            children: <Widget>[
+              _isUploading ? LinearProgressIndicator() : Text(''),
               _textFieldFormTitle(),
               _bannerPost(),
               _textFieldFormDescricao(),

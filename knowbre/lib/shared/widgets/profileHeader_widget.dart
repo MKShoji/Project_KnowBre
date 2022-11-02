@@ -1,81 +1,41 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:knowbre/pages/profile/profile_contoller.dart';
 import 'package:knowbre/pages/profile/profile_edit_page.dart';
 import 'package:knowbre/shared/constants/controllers.dart';
-import 'package:knowbre/shared/models/post.dart';
 import 'package:knowbre/shared/themes/app_colors.dart';
-import 'package:knowbre/shared/widgets/cardPost_widget.dart';
-import 'package:knowbre/shared/widgets/post_widget.dart';
 
-class ProfilePage extends StatefulWidget {
+class ProfileHeaderWidget extends StatefulWidget {
   final String profileId;
-  const ProfilePage({Key? key, required this.profileId}) : super(key: key);
+  final int postCount;
+
+  ProfileHeaderWidget(this.profileId, this.postCount);
 
   @override
-  State<ProfilePage> createState() => _ProfilePageState();
+  State<ProfileHeaderWidget> createState() => _ProfileHeaderWidgetState();
 }
 
-class _ProfilePageState extends State<ProfilePage> {
-  final ProfileController _profileControllerx = Get.put(ProfileController());
-
-  final String? currentUserId = authController.firebaseAuth.currentUser?.uid;
-  bool isLoading = false;
-  int postCount = 0;
-  List<Post> posts = [];
-  String postOrientation = "grid";
-  bool isFollowing = false;
-  int followerCount = 0;
-  int followingCount = 0;
-
-  void initState() {
-    super.initState();
-    getProfilePosts();
+class _ProfileHeaderWidgetState extends State<ProfileHeaderWidget> {
+  @override
+  Widget build(BuildContext context) {
+    return SliverPersistentHeader(
+        floating: false,
+        pinned: true,
+        delegate: HeaderDelegate(widget.profileId, widget.postCount));
   }
+}
 
-  getProfilePosts() async {
-    setState(() {
-      isLoading = true;
-    });
-    QuerySnapshot snapshot = await firebaseFirestore
-        .collection("posts")
-        .doc(widget.profileId)
-        .collection('userPost')
-        .orderBy('timestamp', descending: true)
-        .get();
-    setState(() {
-      isLoading = false;
-      postCount = snapshot.docs.length;
-      posts = snapshot.docs.map((doc) => Post.fromDocument(doc)).toList();
-    });
-  }
+class HeaderDelegate extends SliverPersistentHeaderDelegate {
+  final String profileId;
+  final int postCount;
 
-  Widget buildProfilePosts() {
-    if (isLoading) {
-      return CircularProgressIndicator();
-    }
-    List<GridTile> gridTiles = [];
-    posts.forEach((post) {
-      gridTiles.add(GridTile(
-        child: CardPostWidget(post: post),
-      ));
-    });
-    return GridView.count(
-      crossAxisCount: 3,
-      childAspectRatio: 0.60,
-      mainAxisSpacing: 10,
-      crossAxisSpacing: 10,
-      shrinkWrap: true,
-      physics: NeverScrollableScrollPhysics(),
-      children: gridTiles,
-    );
-  }
+  HeaderDelegate(this.profileId, this.postCount);
 
-  Widget _header() {
+  @override
+  Widget build(
+      BuildContext context, double shrinkOffset, bool overlapsContent) {
     return FutureBuilder(
-        future:
-            firebaseFirestore.collection('users').doc(widget.profileId).get(),
+        future: firebaseFirestore.collection('users').doc(profileId).get(),
         builder: (context, snapshot) {
           if (!snapshot.hasData) {
             return CircularProgressIndicator();
@@ -249,44 +209,13 @@ class _ProfilePageState extends State<ProfilePage> {
   }
 
   @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: AppColor.background,
-      appBar: AppBar(
-        backgroundColor: AppColor.background,
-        iconTheme: IconThemeData(color: AppColor.primary),
-        toolbarHeight: 40,
-        shadowColor: AppColor.background,
-        elevation: 1,
-      ),
-      body: Column(
-        children: <Widget>[
-          _header(),
-          Container(
-            child: TabBar(
-              tabs: _profileControllerx.tabs,
-              controller: _profileControllerx.tabController,
-              isScrollable: true,
-              labelColor: AppColor.primary,
-              unselectedLabelColor: Colors.black,
-              indicatorColor: AppColor.primary,
-            ),
-          ),
-          Expanded(
-            child: TabBarView(
-              children: [
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: SingleChildScrollView(child: buildProfilePosts()),
-                ),
-                Center(child: Text("Meus videos")),
-                Center(child: Text("Salves")),
-              ],
-              controller: _profileControllerx.tabController,
-            ),
-          ),
-        ],
-      ),
-    );
+  double get maxExtent => 250;
+
+  @override
+  double get minExtent => 210;
+
+  @override
+  bool shouldRebuild(covariant SliverPersistentHeaderDelegate oldDelegate) {
+    return true;
   }
 }

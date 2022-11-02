@@ -47,6 +47,7 @@ dependencies:
   url_launcher: ^6.1.6
   uuid: ^3.0.6
   firebase_database: ^9.1.7
+  cached_network_image: ^3.2.0
 
 flutter_native_splash:
   color: "#192EFF"
