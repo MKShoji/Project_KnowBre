@@ -8,18 +8,45 @@ class CardPreview extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Container(
-          margin: const EdgeInsets.all(10.0),
-          color: AppColor.primary,
-          width: 400,
-          height: 100,
-          child: Text('Hello World',
-            style: Theme.of(context)
-                .textTheme
-                .headline4!
-                .copyWith(color: Colors.white)),
+     return Container(
+      height: 200,
+      child: Card(
+        elevation: 5,
+        margin: const EdgeInsets.all(10.0),
+        clipBehavior: Clip.antiAlias,
+        child: Column(
+          children: [
+            ListTile(
+              //Icone do Usuário
+              leading: CircleAvatar(backgroundImage: AssetImage('assets/images/default_avatar.png')),
+              //Nome de Usuário
+              title: Text(
+                'Nome de Usuário',
+                style: TextStyle(color: Colors.black.withOpacity(0.6)),
+              ),
+              subtitle: const Text(
+                'Título do Card',
+                style: TextStyle(color: AppColor.primary, fontSize: 22),
+              ),
+            ),
+            //Imagem e Descrição/Parte do texto
+            Row(
+              children: [
+                Container(
+                  padding: EdgeInsets.all(10),
+                  child: Image.asset('assets/images/default_avatar.png', width: 80, height: 80)
+                ),
+                Expanded(
+                  child: Text(
+                    'Olha só que texto legal interessante super clicável extraordinário eletrizante chocante exuberante inteligente',
+                    style: TextStyle(color: Colors.black.withOpacity(0.6)),
+                  ),
+                )
+              ],
+            ),
+          ],
         ),
+      )
     );
   }
 }

@@ -82,10 +82,6 @@ class _HomePageControllerState extends State<HomePageController> {
             trailing: Icon(Icons.notifications),
           ),
           ListTile(
-            title: Text('Configurações'),
-            trailing: Icon(Icons.settings),
-          ),
-          ListTile(
             title: Text('Sair'),
             trailing: Icon(Icons.exit_to_app_outlined),
             onTap: () {
