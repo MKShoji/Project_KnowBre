@@ -38,18 +38,28 @@ Widget customListTile(Article article) {
                 SizedBox(
                   height: 8.0,
                 ),
-                Container(
-                  padding: EdgeInsets.all(6.0),
-                  decoration: BoxDecoration(
-                    color: AppColor.primary,
-                    borderRadius: BorderRadius.circular(30.0),
-                  ),
-                  child: Text(
-                    article.source.name,
-                    style: TextStyle(
-                      color: Colors.white,
+                Row(
+                  children: [
+                    Container(
+                      padding: EdgeInsets.all(6.0),
+                      margin: EdgeInsets.only(right: 5.0),
+                      decoration: BoxDecoration(
+                        color: AppColor.primary,
+                        borderRadius: BorderRadius.circular(30.0),
+                      ),
+                      child: Text(
+                        article.source.name,
+                        style: TextStyle(
+                          color: Colors.white,
+                        ),
+                      ),
                     ),
-                  ),
+                    Icon(
+                      Icons.verified_rounded,
+                      color: AppColor.primary,
+                      size: 30.0,
+                    ),
+                  ],
                 ),
                 SizedBox(height: 8.0),
                 Text(
@@ -113,18 +123,28 @@ Widget customListTile(Article article) {
             ),
           ),
           SizedBox(height: 8.0),
-          Container(
-            padding: EdgeInsets.all(10.0),
-            decoration: BoxDecoration(
-              color: AppColor.primary,
-              borderRadius: BorderRadius.circular(10.0),
-            ),
-            child: Text(
-              article.source.name,
-              style: TextStyle(
-                color: Colors.white,
+          Row(
+            children: [
+              Container(
+                padding: EdgeInsets.all(10.0),
+                margin: EdgeInsets.only(right: 5.0),
+                decoration: BoxDecoration(
+                  color: AppColor.primary,
+                  borderRadius: BorderRadius.circular(10.0),
+                ),
+                child: Text(
+                  article.source.name,
+                  style: TextStyle(
+                    color: Colors.white,
+                  ),
+                ),
               ),
-            ),
+              Icon(
+                  Icons.verified_rounded,
+                  color: AppColor.primary,
+                  size: 30.0,
+                ),
+            ],
           ),
           SizedBox(height: 8.0),
           Column(
