@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:knowbre/shared/themes/app_colors.dart';
 import 'package:knowbre/shared/themes/app_images.dart';
 import 'package:sign_in_button/sign_in_button.dart';
 
@@ -14,88 +15,91 @@ class _WelcomePageState extends State<WelcomePage> {
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
     return Scaffold(
-      body: Container(
-      width: double.infinity,
-      height: double.infinity,
-      decoration: BoxDecoration(
-      image: DecorationImage(
-        image: AssetImage('assets/images/knowbre_regis.jpg'), 
-        fit: BoxFit.cover,
-        )
-      ),
-      child: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
+      body: Stack(children: [
+        Container(
+            decoration: BoxDecoration(
+          image: DecorationImage(
+              image: AssetImage('assets/images/knowbre_regis.jpg'),
+              fit: BoxFit.cover),
+        )),
+        Container(
+            decoration: BoxDecoration(
+                gradient: LinearGradient(
+                    begin: Alignment.topCenter,
+                    end: Alignment.bottomCenter,
+                    colors: [Colors.black, Colors.black.withOpacity(0.0)]))),
+        Column(
           children: [
-            Stack(
-              children: [
-                Center(
-                    child: Text(
-                      "Bem-vindo ao KnowBre",
-                      style: TextStyle(
-                        fontSize: 20,
-                        color: Colors.blue,
-                       fontWeight: FontWeight.bold),
-                      textAlign: TextAlign.center,
-                    )
+            Container(
+                margin: EdgeInsets.symmetric(vertical: 100, horizontal: 0),
+                child: RichText(
+                  textAlign: TextAlign.center,
+                  text: TextSpan(
+                    text: 'Bem-vindo(a) ao ',
+                    style: TextStyle(fontSize: 30),
+                    children: const <TextSpan>[
+                      TextSpan(
+                          text: 'Know',
+                          style: TextStyle(
+                              fontSize: 70,
+                              fontWeight: FontWeight.bold,
+                              color: AppColor.primary)),
+                      TextSpan(
+                          text: 'Bre',
+                          style: TextStyle(
+                              fontSize: 70,
+                              fontWeight: FontWeight.w100,
+                              color: AppColor.primary)),
+                    ],
                   ),
-                ],
-              ),
-              const Padding(
-                padding: EdgeInsets.only(
-                left: 20,
-                top: 10,
-                right: 16,
-                bottom: 10,
-                ),
-                child: Text(
-                  "Bem-vindo ao KnowBre",
-                  style: TextStyle(
-                    fontSize: 20,
-                    color: Colors.blue,
-                    fontWeight: FontWeight.bold),
-                    textAlign: TextAlign.center,
-                ),
-              ),
-              const Spacer(
-                flex: 1,
-              ),
-              Column(
+                )),
+          ],
+        ),
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisSize: MainAxisSize.max,
+          mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              Row(
                 children: [
-                  SignInButton(
-                    Buttons.email,
-                    text: "Entrar com email",
-                    onPressed: () {
-                      Navigator.pushReplacementNamed(context, "/login");
-                    },
+                  Container(
+                    width: 160,
+                    child: OutlinedButton(
+                      child: Text(
+                        "Entrar",
+                        style: TextStyle(fontSize: 20, color: AppColor.primary),
+                      ),
+                      style: OutlinedButton.styleFrom(
+                        backgroundColor: Colors.white,
+                        padding: EdgeInsets.symmetric(vertical: 20, horizontal: 15)
+                      ),
+                      onPressed: () {
+                        Navigator.pushReplacementNamed(context, "/login");
+                      },
+                    ),
                   ),
-                  const Divider(
-                    height: 15,
-                    thickness: 1.5,
-                    indent: 95,
-                    endIndent: 95,
-                    color: Colors.grey,
+                  Container(
+                    width: 160,
+                    child: OutlinedButton(
+                      child: Text(
+                        "Cadastre-se",
+                        style: TextStyle(fontSize: 20, color: Colors.white),
+                      ),
+                      style: OutlinedButton.styleFrom(
+                        backgroundColor: AppColor.primary,
+                        padding: EdgeInsets.symmetric(vertical: 20, horizontal: 15)
+                      ),
+                      onPressed: () {
+                        Navigator.pushReplacementNamed(context, "/register");
+                      },
+                    ),
                   ),
-                  SignInButton(
-                    Buttons.googleDark,
-                    text: "Entrar com google",
-                    onPressed: () {},
-                  ),
-                  SignInButton(
-                    Buttons.facebook,
-                    text: "Entrar com facebook",
-                    onPressed: () {},
-                  )
-                ],
-              ),
-              const Spacer(
-                flex: 1,
+                ]
               ),
             ],
-          ),
-        ),
-      ),
+          )
+        ]
+      )
     );
   }
 }
