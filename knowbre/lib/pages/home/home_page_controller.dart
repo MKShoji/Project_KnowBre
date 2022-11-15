@@ -139,7 +139,14 @@ class _HomePageControllerState extends State<HomePageController> {
                 Icon(Icons.notifications),
                 Padding(padding: EdgeInsets.symmetric(horizontal: 5)),
                 GestureDetector(
-                  onTap: () {},
+                  onTap: () {
+                    Get.to(
+                      () => ProfilePage(
+                        profileId: authController.firebaseAuth.currentUser!.uid,
+                      ),
+                      transition: Transition.cupertino,
+                    );
+                  },
                   child: CircleAvatar(
                     backgroundImage: NetworkImage(authController
                             .firestoreUser.value?.photoURL ??

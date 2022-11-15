@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart';
 import 'package:knowbre/shared/constants/controllers.dart';
+import 'package:knowbre/shared/widgets/post_widget.dart';
 
 import '../../shared/models/post.dart';
 
@@ -52,8 +53,12 @@ class _HomePageState extends State<HomePage> {
         child: Text("Sem Posts"),
       );
     }
+    List<PostWidget> postW = [];
+    posts.forEach((post) {
+      postW.add(PostWidget(post: post));
+    });
     return Column(
-      children: posts,
+      children: postW,
     );
   }
 

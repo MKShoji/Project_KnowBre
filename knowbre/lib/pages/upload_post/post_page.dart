@@ -2,7 +2,9 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:knowbre/shared/constants/controllers.dart';
 import 'package:knowbre/shared/models/post.dart';
+import 'package:knowbre/shared/models/user.dart';
 import 'package:knowbre/shared/themes/app_colors.dart';
+import 'package:knowbre/shared/widgets/cardArticles_widget.dart';
 import 'package:knowbre/shared/widgets/post_widgetPage.dart';
 
 class PostPage extends StatefulWidget {
@@ -28,6 +30,7 @@ class _PostPageState extends State<PostPage> {
           if (!snapshot.hasData) {
             return Center(child: CircularProgressIndicator());
           } else {
+            Post post = Post.fromDocument(snapshot.data!);
             return Center(
               child: Scaffold(
                 appBar: AppBar(
@@ -40,9 +43,38 @@ class _PostPageState extends State<PostPage> {
                 body: ListView(
                   children: <Widget>[
                     Container(
-                      child: PostWidgetPage(),
-                    )
+                      child: PostWidgetPage(
+                        post: post,
+                      ),
+                    ),
+                    SizedBox(height: 30),
                   ],
+                ),
+                bottomNavigationBar: BottomAppBar(
+                  color: AppColor.background,
+                  elevation: 3,
+                  child: IconTheme(
+                    data: IconThemeData(
+                      color: AppColor.primary,
+                    ),
+                    child: Row(
+                      children: <Widget>[
+                        IconButton(
+                          onPressed: () {},
+                          icon: const Icon(
+                            Icons.bookmark_add_outlined,
+                            size: 28.0,
+                          ),
+                        ),
+                        IconButton(
+                            onPressed: () {},
+                            icon: Icon(
+                              Icons.star_border,
+                              size: 28.0,
+                            ))
+                      ],
+                    ),
+                  ),
                 ),
               ),
             );
