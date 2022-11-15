@@ -1,8 +1,5 @@
 import 'dart:io';
 
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_database/firebase_database.dart';
-import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
@@ -64,15 +61,26 @@ class _UploadPostPageState extends State<UploadPostPage> {
         .collection('userPost')
         .doc(postId)
         .set({
-      "postId": postId,
-      "ownerId": authController.firebaseAuth.currentUser!.uid,
-      "username": authController.firestoreUser.value!.username,
-      "mediaUrl": mediaUrl,
-      "title": title,
-      "description": description,
-      "timestamp": timestamp,
-      "likes": {},
-    });
+          "postId": postId,
+          "ownerId": authController.firebaseAuth.currentUser!.uid,
+          "username": authController.firestoreUser.value!.username,
+          "mediaUrl": mediaUrl,
+          "title": title,
+          "description": description,
+          "timestamp": timestamp,
+          "likes": {},
+          "articlesNum": value,
+        })
+        .then((value) => Get.defaultDialog(
+              title: "Sucesso !",
+              middleText: "Seus Post foi enviado com sucesso",
+              backgroundColor: AppColor.backgroundList,
+              titleStyle: TextStyle(color: AppColor.primary, fontSize: 22),
+              radius: 30,
+            ))
+        .then(
+          (value) => Get.back(),
+        );
   }
 
   int value = 1;
@@ -151,13 +159,14 @@ class _UploadPostPageState extends State<UploadPostPage> {
 
   Widget _textFieldFormDescricao() {
     return Container(
-      height: 25,
-      margin: EdgeInsets.fromLTRB(2.5, 1, 2.5, 20),
+      margin: EdgeInsets.fromLTRB(2.5, 10, 2.5, 20),
       child: TextFormField(
-        keyboardType: TextInputType.text,
+        keyboardType: TextInputType.multiline,
+        maxLength: 30,
+        maxLines: 2,
         controller: _descricaoController,
         decoration: InputDecoration(
-          hintText: "Autor(a) ou Fonte",
+          hintText: "Descricao",
           hintStyle: TextStyle(color: AppColor.profilePickIcon, fontSize: 14),
           enabledBorder: UnderlineInputBorder(
             borderSide: BorderSide(color: AppColor.primary),
@@ -215,7 +224,11 @@ class _UploadPostPageState extends State<UploadPostPage> {
           ),
           child: Column(
             children: <Widget>[
-              _isUploading ? LinearProgressIndicator() : Text(''),
+              _isUploading
+                  ? LinearProgressIndicator(
+                      color: AppColor.primary,
+                    )
+                  : Text(''),
               _textFieldFormTitle(),
               _bannerPost(),
               _textFieldFormDescricao(),

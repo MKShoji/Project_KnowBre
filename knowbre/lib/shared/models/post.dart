@@ -1,25 +1,31 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:knowbre/pages/profile/profile_page.dart';
+import 'package:knowbre/pages/upload_post/post_page.dart';
 import 'package:knowbre/shared/constants/controllers.dart';
-import 'package:knowbre/shared/utilities/cache_image.dart';
+import 'package:knowbre/shared/models/models.dart';
+import 'package:knowbre/shared/themes/app_colors.dart';
 
 class Post extends StatefulWidget {
   final String postId;
   final String ownerId;
-  final String? username;
+  final String username;
   final String title;
   final String description;
   final String mediaUrl;
   final dynamic likes;
 
-  Post(
-      {required this.postId,
-      required this.ownerId,
-      required this.username,
-      required this.title,
-      required this.description,
-      required this.mediaUrl,
-      this.likes});
+  Post({
+    required this.postId,
+    required this.ownerId,
+    required this.username,
+    required this.title,
+    required this.description,
+    required this.mediaUrl,
+    this.likes,
+  });
 
   factory Post.fromDocument(DocumentSnapshot doc) {
     return Post(
@@ -62,7 +68,7 @@ class Post extends StatefulWidget {
 class _PostState extends State<Post> {
   final String postId;
   final String ownerId;
-  final String username;
+  final String? username;
   final String title;
   final String description;
   final String mediaUrl;
@@ -80,116 +86,186 @@ class _PostState extends State<Post> {
     required this.likeCount,
   });
 
-  Widget buildPostHeader() {
-    return FutureBuilder(
-        future: firebaseFirestore.collection("posts").doc(ownerId).get(),
-        builder: (context, snapshot) {
-          if (!snapshot.hasData) {
-            return CircularProgressIndicator();
-          }
-          return ListTile(
-            leading: CircleAvatar(
-              backgroundImage: NetworkImage(
-                  authController.firestoreUser.value?.photoURL ?? ''),
-              backgroundColor: Colors.grey,
-            ),
-            title: GestureDetector(
-              onTap: () {},
-              child: Text(
-                authController.firestoreUser.value?.username ?? 'Usuário',
-                style:
-                    TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
-              ),
-            ),
-            subtitle: Text(title),
-            trailing: IconButton(onPressed: () {}, icon: Icon(Icons.more_vert)),
-          );
-        });
+  String currentUserId = authController.firebaseAuth.currentUser!.uid;
+
+  deletePost() async {
+    firebaseFirestore
+        .collection("posts")
+        .doc(ownerId)
+        .collection("userPost")
+        .doc(postId)
+        .get()
+        .then((doc) {
+      if (doc.exists) {
+        doc.reference.delete().then((value) => Get.defaultDialog(
+              title: "Sucesso !",
+              middleText: "Seus Post foi deletado com sucesso",
+              backgroundColor: AppColor.backgroundList,
+              titleStyle: TextStyle(color: AppColor.primary),
+              radius: 30,
+            ));
+      }
+    });
+
+    firebaseStorage
+        .ref()
+        .child("/fotos")
+        .child("posts")
+        .child('post_${postId}.jpg')
+        .delete();
   }
 
-  Widget buildPostImage() {
-    return GestureDetector(
-      onDoubleTap: () {},
-      child: Stack(
-        alignment: Alignment.center,
+  handleDeletePost(BuildContext parentContext) {
+    return showDialog(
+      context: parentContext,
+      builder: (context) => SimpleDialog(
+        title: Text("Remover este post ?"),
         children: <Widget>[
-          Align(
-              alignment: Alignment.centerLeft,
-              child: Container(
-                  margin: const EdgeInsets.symmetric(horizontal: 10),
-                  height: 200,
-                  width: 200,
-                  child: cachedNetworkImage(mediaUrl))),
+          SimpleDialogOption(
+            onPressed: () {
+              Navigator.pop(context);
+              deletePost();
+            },
+            child: Text(
+              'Deletar',
+              style: TextStyle(color: Colors.red),
+            ),
+          ),
+          SimpleDialogOption(
+            onPressed: () => Navigator.pop(context),
+            child: Text('Cancelar'),
+          )
         ],
       ),
     );
   }
 
-  Widget buildPostFooter() {
-    return Column(
-      children: <Widget>[
-        Row(
-          children: <Widget>[
-            Padding(
-              padding: EdgeInsets.only(top: 40.0, left: 20.0),
+  Widget buildPostHeader() {
+    return FutureBuilder<DocumentSnapshot>(
+        future: firebaseFirestore.collection("users").doc(ownerId).get(),
+        builder: (context, snapshot) {
+          if (!snapshot.hasData) {
+            return CircularProgressIndicator();
+          }
+          UserModel user = UserModel.fromSnap(snapshot.data!);
+          bool isPostOwner =
+              authController.firebaseAuth.currentUser?.uid == ownerId;
+          return ListTile(
+            leading: CircleAvatar(
+              backgroundImage: NetworkImage(user.photoURL ?? ''),
+              backgroundColor: AppColor.primary,
             ),
-            GestureDetector(
-              onTap: () {},
-              child:
-                  Icon(Icons.favorite_border, size: 28.0, color: Colors.pink),
-            ),
-            Padding(
-              padding: EdgeInsets.only(right: 20.0),
-            ),
-            GestureDetector(
-              onTap: () {},
-              child:
-                  Icon(Icons.star_border, size: 28.0, color: Colors.blue[900]),
-            ),
-          ],
-          mainAxisAlignment: MainAxisAlignment.start,
-        ),
-        Row(
-          children: <Widget>[
-            Container(
-              margin: EdgeInsets.only(left: 20.0),
+            title: GestureDetector(
+              onTap: () {
+                Get.to(() => ProfilePage(profileId: widget.ownerId));
+              },
               child: Text(
-                '$likeCount likes',
-                style:
-                    TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
-              ),
-            )
-          ],
-        ),
-        Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            Container(
-              margin: EdgeInsets.only(left: 20.0),
-              child: Text(
-                '${authController.firestoreUser.value!.username} ',
+                user.username ?? 'Usuário',
                 style:
                     TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
               ),
             ),
-            Expanded(
-              child: Text(description),
-            )
+            trailing: isPostOwner
+                ? IconButton(
+                    onPressed: () => handleDeletePost(context),
+                    icon: Icon(Icons.more_vert),
+                  )
+                : Text(''),
+          );
+        });
+  }
+
+  buildPostImage() {
+    return Container(
+      margin: const EdgeInsets.only(right: 30),
+      height: 125,
+      width: 100,
+      child: GestureDetector(
+        onDoubleTap: () {},
+        child: Stack(
+          alignment: Alignment.center,
+          children: <Widget>[
+            CachedNetworkImage(
+              imageUrl: mediaUrl,
+              fit: BoxFit.cover,
+              placeholder: (context, url) => Padding(
+                child: CircularProgressIndicator(),
+                padding: EdgeInsets.all(20),
+              ),
+              imageBuilder: (context, imageProvider) => Container(
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(10),
+                  image: DecorationImage(
+                    image: imageProvider,
+                    fit: BoxFit.cover,
+                  ),
+                ),
+              ),
+              errorWidget: (context, url, error) => Icon(Icons.error),
+            ),
           ],
-        )
-      ],
+        ),
+      ),
     );
   }
 
-  @override
+  Widget buildPostDescription() {
+    return Expanded(
+      child: Container(
+        width: 100,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            Container(
+              child: Text(
+                title,
+                style: TextStyle(
+                  color: Colors.black,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 18,
+                ),
+              ),
+            ),
+            Text(description),
+            SizedBox(
+              height: 10,
+            ),
+            Text(
+              "X ARTIGOS",
+              style: TextStyle(
+                  color: AppColor.primary,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 14),
+            )
+          ],
+        ),
+      ),
+    );
+  }
+
   Widget build(BuildContext context) {
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      children: <Widget>[
-        buildPostHeader(),
-        buildPostImage(),
-        buildPostFooter(),
-      ],
+    return Container(
+      color: AppColor.backgroundList,
+      child: GestureDetector(
+        onTap: () {
+          Get.to(() => PostPage());
+        },
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: <Widget>[
+            buildPostHeader(),
+            Container(
+              color: AppColor.background,
+              margin: EdgeInsets.symmetric(horizontal: 20),
+              child: Row(
+                textDirection: TextDirection.ltr,
+                children: [buildPostImage(), buildPostDescription()],
+              ),
+            ),
+            SizedBox(height: 50)
+          ],
+        ),
+      ),
     );
   }
 }

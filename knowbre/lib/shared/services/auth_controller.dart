@@ -40,7 +40,7 @@ class AuthController extends GetxController {
       );
     } else {
       Get.offAll(() => const HomePageController(),
-          transition: Transition.native);
+          transition: Transition.cupertino);
     }
   }
 

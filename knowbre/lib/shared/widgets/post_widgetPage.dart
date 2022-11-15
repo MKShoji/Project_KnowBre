@@ -5,64 +5,23 @@ import 'package:knowbre/pages/upload_post/post_page.dart';
 import 'package:knowbre/shared/constants/controllers.dart';
 import 'package:knowbre/shared/models/post.dart';
 
-class PostWidget extends StatefulWidget {
-  final Post post;
-  const PostWidget({Key? key, required this.post}) : super(key: key);
+class PostWidgetPage extends StatefulWidget {
+  final Post? post;
+  const PostWidgetPage({Key? key, this.post}) : super(key: key);
 
   @override
-  State<PostWidget> createState() => _PostWidgetState();
+  State<PostWidgetPage> createState() => _PostWidgetPageState();
 }
 
-class _PostWidgetState extends State<PostWidget> {
+class _PostWidgetPageState extends State<PostWidgetPage> {
   @override
   String currentUserId = authController.firebaseAuth.currentUser!.uid;
-  int likeCount = 0;
-  bool isLiked = false;
-  Map likes = {};
-
-  void initState() {
-    super.initState();
-    likeCount = widget.post.getLikeCount(widget.post.likes);
-    likes = widget.post.likes;
-    isLiked = (likes[authController.firebaseAuth.currentUser?.uid]);
-  }
-
-  handleLikePost() {
-    bool _isLiked = likes[currentUserId] == true;
-    if (_isLiked) {
-      firebaseFirestore
-          .collection("posts")
-          .doc(widget.post.ownerId)
-          .collection('userPosts')
-          .doc(widget.post.postId)
-          .update({'likes.$currentUserId': false});
-      setState(() {
-        likeCount -= 1;
-        isLiked = false;
-        likes[currentUserId] = false;
-      });
-    } else if (isLiked != null) {
-      firebaseFirestore
-          .collection("posts")
-          .doc(widget.post.ownerId)
-          .collection('userPosts')
-          .doc(widget.post.postId)
-          .update({
-        'likes.$currentUserId': true,
-      });
-      setState(() {
-        likeCount += 1;
-        isLiked = true;
-        likes[currentUserId] = true;
-      });
-    }
-  }
 
   Widget buildPostHeader() {
     return FutureBuilder(
         future: firebaseFirestore
             .collection("posts")
-            .doc(widget.post.ownerId)
+            .doc(widget.post!.ownerId)
             .get(),
         builder: (context, snapshot) {
           if (!snapshot.hasData) {
@@ -82,7 +41,7 @@ class _PostWidgetState extends State<PostWidget> {
                     TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
               ),
             ),
-            subtitle: Text(widget.post.title),
+            subtitle: Text(widget.post!.title),
             trailing: IconButton(onPressed: () {}, icon: Icon(Icons.more_vert)),
           );
         });
@@ -95,7 +54,7 @@ class _PostWidgetState extends State<PostWidget> {
         alignment: Alignment.center,
         children: <Widget>[
           CachedNetworkImage(
-            imageUrl: widget.post.mediaUrl,
+            imageUrl: widget.post!.mediaUrl,
             fit: BoxFit.cover,
             placeholder: (context, url) => Padding(
               child: CircularProgressIndicator(),
@@ -117,9 +76,9 @@ class _PostWidgetState extends State<PostWidget> {
               padding: EdgeInsets.only(top: 40.0, left: 20.0),
             ),
             GestureDetector(
-              onTap: handleLikePost,
-              child: Icon(isLiked ? Icons.favorite : Icons.favorite_border,
-                  size: 28.0, color: Colors.pink),
+              onTap: () {},
+              child:
+                  Icon(Icons.favorite_border, size: 28.0, color: Colors.pink),
             ),
             Padding(
               padding: EdgeInsets.only(right: 20.0),
@@ -156,7 +115,7 @@ class _PostWidgetState extends State<PostWidget> {
               ),
             ),
             Expanded(
-              child: Text(widget.post.description),
+              child: Text(widget.post!.description),
             )
           ],
         )
@@ -166,9 +125,6 @@ class _PostWidgetState extends State<PostWidget> {
 
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () {
-        Get.to(() => PostPage());
-      },
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: <Widget>[

@@ -21,7 +21,10 @@ class AppWidget {
     GetPage(name: '/register', page: () => const RegisterPage()),
     GetPage(name: '/register2', page: () => const NextRegisterPage()),
     GetPage(name: '/forgot_password', page: () => const ForgotPasswordPage()),
-    GetPage(name: '/home', page: () => HomePageController()),
+    GetPage(
+        name: '/home',
+        page: () => HomePageController(),
+        transition: Transition.cupertino),
     GetPage(
         name: '/profile',
         page: () => ProfilePage(

@@ -45,15 +45,17 @@ class UserModel {
         "apelido": apelido,
         "dateNasc": dataNasc,
       };
-  factory UserModel.fromDocument(DocumentSnapshot doc) {
+  static UserModel fromSnap(DocumentSnapshot snap) {
+    var snapshot = snap.data() as Map<String, dynamic>;
     return UserModel(
-        uid: doc['uid'],
-        username: doc['username'],
-        email: doc['email'],
-        photoURL: doc['photoURL'],
-        apelido: doc['apelido'],
-        localizacao: doc['localizacao'],
-        formacao: doc['formacao'],
-        dataNasc: doc['dataNasc']);
+      email: snapshot['email'],
+      username: snapshot['username'],
+      photoURL: snapshot['photoURL'],
+      apelido: snapshot['apelido'],
+      localizacao: snapshot['localizacao'],
+      dataNasc: snapshot['dataNasc'],
+      formacao: snapshot['formacao'],
+      uid: snapshot['uid'],
+    );
   }
 }
