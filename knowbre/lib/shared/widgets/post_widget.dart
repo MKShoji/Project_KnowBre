@@ -163,16 +163,6 @@ class _PostWidgetState extends State<PostWidget> {
               ),
             ),
             Text(widget.post.description),
-            SizedBox(
-              height: 10,
-            ),
-            Text(
-              "X ARTIGOS",
-              style: TextStyle(
-                  color: AppColor.primary,
-                  fontWeight: FontWeight.bold,
-                  fontSize: 14),
-            )
           ],
         ),
       ),

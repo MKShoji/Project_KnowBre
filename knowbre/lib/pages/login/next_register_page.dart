@@ -144,8 +144,9 @@ class _NextRegisterPageState extends State<NextRegisterPage> {
   Widget _registerBtn() {
     return Container(
       padding: const EdgeInsets.symmetric(vertical: 25.0),
+      height: 100,
       width: double.infinity,
-      child: RaisedButton(
+      child: ElevatedButton(
         onPressed: () async {
           if (_formKey.currentState!.validate() == true) {
             await uploadPfp().then((value) async {});
@@ -163,8 +164,9 @@ class _NextRegisterPageState extends State<NextRegisterPage> {
             );
           }
         },
-        padding: const EdgeInsets.all(15.0),
-        color: AppColor.primary,
+        style: ElevatedButton.styleFrom(
+          primary: AppColor.primary,
+        ),
         child: const Text(
           'Registrar',
           style: TextStyle(

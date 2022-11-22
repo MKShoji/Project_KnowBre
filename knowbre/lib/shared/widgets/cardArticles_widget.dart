@@ -10,6 +10,9 @@ class CardArticles extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final tituloArticleController = TextEditingController();
+    final textArticleController = TextEditingController();
+
     return Container(
       decoration: BoxDecoration(
           color: AppColor.background,
@@ -33,9 +36,10 @@ class CardArticles extends StatelessWidget {
                 decoration: InputDecoration(
                   hintText: "Título do Artigo",
                   hintStyle:
-                      TextStyle(color: AppColor.profilePick, fontSize: 20),
+                      TextStyle(color: AppColor.profilePick, fontSize: 22),
                   border: InputBorder.none,
                 ),
+                controller: tituloArticleController,
               ),
             ),
             Container(
@@ -43,12 +47,14 @@ class CardArticles extends StatelessWidget {
               child: TextFormField(
                 keyboardType: TextInputType.multiline,
                 maxLines: null,
+                maxLength: 300,
                 decoration: InputDecoration(
                   hintText: "Corpo do artigo...",
                   hintStyle:
                       TextStyle(color: AppColor.profilePickIcon, fontSize: 12),
                   border: InputBorder.none,
                 ),
+                controller: textArticleController,
               ),
             ),
           ],

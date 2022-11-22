@@ -8,3 +8,7 @@ void showAlert(String massage) {
 String generateId() {
   return Uuid().v4();
 }
+
+String generateIdArticle() {
+  return Uuid().v1();
+}

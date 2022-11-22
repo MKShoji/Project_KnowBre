@@ -133,8 +133,9 @@ class _AuthPageState extends State<AuthPage> {
   Widget _loginBtn() {
     return Container(
       padding: const EdgeInsets.symmetric(vertical: 25.0),
+      height: 100,
       width: double.infinity,
-      child: RaisedButton(
+      child: ElevatedButton(
         onPressed: () {
           if (_formKey.currentState!.validate() == true) {
             AuthController()
@@ -144,8 +145,9 @@ class _AuthPageState extends State<AuthPage> {
                 .then((value) {});
           }
         },
-        padding: const EdgeInsets.all(15.0),
-        color: AppColor.primary,
+        style: ElevatedButton.styleFrom(
+          primary: AppColor.primary,
+        ),
         child: const Text(
           'Entrar',
           style: TextStyle(
@@ -195,14 +197,13 @@ class _AuthPageState extends State<AuthPage> {
   Widget _buildForgotPasswordBtn() {
     return Container(
       alignment: Alignment.centerRight,
-      child: FlatButton(
+      child: TextButton(
         onPressed: () {
           Get.to(
             () => ForgotPasswordPage(),
             transition: Transition.cupertino,
           );
         },
-        padding: EdgeInsets.only(right: 0.0),
         child: const Text(
           'Esqueceu sua senha?',
           style: TextStyle(
@@ -237,6 +238,7 @@ class _AuthPageState extends State<AuthPage> {
                   ),
                   SignInButton(
                     Buttons.googleDark,
+                    text: "Entar com conta Google",
                     onPressed: () {
                       AuthController().googleSignIn();
                     },

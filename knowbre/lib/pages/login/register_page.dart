@@ -199,8 +199,9 @@ class _RegisterPageState extends State<RegisterPage> {
   Widget _registerBtn() {
     return Container(
       padding: const EdgeInsets.symmetric(vertical: 25.0),
+      height: 100,
       width: double.infinity,
-      child: RaisedButton(
+      child: ElevatedButton(
         onPressed: () {
           if (_formKey.currentState!.validate() == true) {
             try {
@@ -232,8 +233,9 @@ class _RegisterPageState extends State<RegisterPage> {
             }
           }
         },
-        padding: const EdgeInsets.all(15.0),
-        color: AppColor.primary,
+        style: ElevatedButton.styleFrom(
+          primary: AppColor.primary,
+        ),
         child: const Text(
           'Próximo',
           style: TextStyle(

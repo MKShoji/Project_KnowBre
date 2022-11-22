@@ -7,6 +7,7 @@ class Post {
   final String title;
   final String description;
   final String mediaUrl;
+  final String text;
   final dynamic likes;
 
   Post({
@@ -16,6 +17,7 @@ class Post {
     required this.title,
     required this.description,
     required this.mediaUrl,
+    required this.text,
     this.likes,
   });
 
@@ -28,6 +30,7 @@ class Post {
       description: doc['description'],
       mediaUrl: doc['mediaUrl'],
       likes: doc['likes'],
+      text: doc['text'],
     );
   }
 

@@ -5,6 +5,7 @@ import 'package:knowbre/shared/models/post.dart';
 import 'package:knowbre/shared/models/user.dart';
 import 'package:knowbre/shared/themes/app_colors.dart';
 import 'package:knowbre/shared/widgets/cardArticles_widget.dart';
+import 'package:knowbre/shared/widgets/htmlWidget.dart';
 import 'package:knowbre/shared/widgets/post_widgetPage.dart';
 
 class PostPage extends StatefulWidget {
@@ -48,6 +49,7 @@ class _PostPageState extends State<PostPage> {
                       ),
                     ),
                     SizedBox(height: 30),
+                    HtmlPageWidget(post: post),
                   ],
                 ),
                 bottomNavigationBar: BottomAppBar(

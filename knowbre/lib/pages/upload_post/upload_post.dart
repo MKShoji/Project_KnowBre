@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:html_editor_enhanced/html_editor.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:knowbre/pages/home/home.dart';
 import 'package:knowbre/shared/constants/controllers.dart';
@@ -25,9 +26,11 @@ class _UploadPostPageState extends State<UploadPostPage> {
   // Controller dos Inputs
   final _tituloController = TextEditingController();
   final _descricaoController = TextEditingController();
+  final textoController = HtmlEditorController();
 
   bool _isUploading = false;
   String postId = generateId();
+  String articleId = generateIdArticle();
 
   Future pickImage() async {
     final pickedfile = await _picker.pickImage(source: ImageSource.gallery);
@@ -54,7 +57,8 @@ class _UploadPostPageState extends State<UploadPostPage> {
   createPostFirestore(
       {required String mediaUrl,
       required String title,
-      required String description}) {
+      required String description,
+      required String text}) {
     firebaseFirestore
         .collection("posts")
         .doc(authController.firebaseAuth.currentUser!.uid)
@@ -67,6 +71,7 @@ class _UploadPostPageState extends State<UploadPostPage> {
           "mediaUrl": mediaUrl,
           "title": title,
           "description": description,
+          "text": text,
           "timestamp": timestamp,
           "likes": {},
           "articlesNum": value,
@@ -83,6 +88,22 @@ class _UploadPostPageState extends State<UploadPostPage> {
         );
   }
 
+  createPostArticle(
+      {required String title, required String text, String? mediaUrl}) {
+    firebaseFirestore
+        .collection("articles")
+        .doc(postId)
+        .collection('articlePost')
+        .doc(articleId)
+        .set({
+      "articleId": articleId,
+      "postId": postId,
+      "title": title,
+      "text": text,
+      "mediaUrl": mediaUrl,
+    });
+  }
+
   int value = 1;
   _addItem() {
     setState(() {
@@ -95,13 +116,16 @@ class _UploadPostPageState extends State<UploadPostPage> {
       _isUploading = true;
     });
     String mediaUrl = await uploadImage(banner!);
+    String dataTxt = await textoController.getText();
     createPostFirestore(
       mediaUrl: mediaUrl,
       title: _tituloController.text,
       description: _descricaoController.text,
+      text: dataTxt,
     );
     _tituloController.clear();
     _descricaoController.clear();
+    textoController.clear();
     setState(() {
       banner == null;
       _isUploading = false;
@@ -232,13 +256,50 @@ class _UploadPostPageState extends State<UploadPostPage> {
               _textFieldFormTitle(),
               _bannerPost(),
               _textFieldFormDescricao(),
-              articlesList(),
-              TextButton.icon(
-                onPressed: _addItem,
-                icon: Icon(Icons.add, color: AppColor.primary),
-                label: Text(
-                  "Adicionar",
-                  style: TextStyle(color: AppColor.primary),
+              // articlesList(),
+              // TextButton.icon(
+              //   onPressed: _addItem,
+              //   icon: Icon(Icons.add, color: AppColor.primary),
+              //   label: Text(
+              //     "Adicionar",
+              //     style: TextStyle(color: AppColor.primary),
+              //   ),
+              // )
+              SizedBox(
+                height: 20,
+              ),
+              HtmlEditor(
+                controller: textoController,
+                htmlEditorOptions: HtmlEditorOptions(
+                  hint: "Digite um texto",
+                  autoAdjustHeight: true,
+                ),
+                otherOptions: OtherOptions(
+                  height: 600,
+                ),
+                htmlToolbarOptions: HtmlToolbarOptions(
+                  toolbarType: ToolbarType.nativeGrid,
+                  toolbarPosition: ToolbarPosition.aboveEditor,
+                  defaultToolbarButtons: [
+                    FontSettingButtons(
+                        fontName: true, fontSize: true, fontSizeUnit: true),
+                    FontButtons(
+                        subscript: false, superscript: false, clearAll: false),
+                    ListButtons(listStyles: false),
+                    InsertButtons(
+                      audio: false,
+                      hr: false,
+                      otherFile: false,
+                      table: false,
+                    ),
+                    OtherButtons(
+                      codeview: false,
+                      help: false,
+                      redo: false,
+                      undo: false,
+                      fullscreen: false,
+                    )
+                  ],
                 ),
               )
             ],

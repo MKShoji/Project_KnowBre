@@ -79,16 +79,16 @@ class _WelcomePageState extends State<WelcomePage> {
                         margin:
                             EdgeInsets.symmetric(horizontal: 2.5, vertical: 20),
                         width: 150,
-                        height: 90,
+                        height: 80,
                         padding: const EdgeInsets.symmetric(vertical: 10.0),
-                        child: RaisedButton(
+                        child: ElevatedButton(
                           onPressed: () {
                             Get.to(() => AuthPage());
                           },
-                          elevation: 0,
-                          padding: const EdgeInsets.all(10.0),
-                          color: AppColor.background,
-                          shape: Border.all(color: AppColor.background),
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: AppColor.background,
+                            elevation: 0.0,
+                          ),
                           child: const Text(
                             'Entrar',
                             style: TextStyle(
@@ -106,16 +106,18 @@ class _WelcomePageState extends State<WelcomePage> {
                       ),
                       Container(
                         width: 150,
-                        height: 90,
+                        height: 80,
                         padding: const EdgeInsets.symmetric(vertical: 10.0),
-                        child: RaisedButton(
+                        child: ElevatedButton(
                           onPressed: () {
                             Get.to(() => RegisterPage());
                           },
-                          elevation: 0,
-                          padding: const EdgeInsets.all(15.0),
-                          color: Colors.transparent,
-                          shape: Border.all(color: AppColor.background),
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.transparent,
+                            elevation: 0,
+                            side: BorderSide(
+                                color: AppColor.background, width: 2),
+                          ),
                           child: const Text(
                             'Cadastra-se',
                             style: TextStyle(
