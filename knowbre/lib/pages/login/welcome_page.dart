@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:knowbre/pages/login/login.dart';
-import 'package:knowbre/pages/upload_post/post_page.dart';
 import 'package:knowbre/shared/themes/app_colors.dart';
 import 'package:knowbre/shared/themes/app_images.dart';
 import 'package:sign_in_button/sign_in_button.dart';

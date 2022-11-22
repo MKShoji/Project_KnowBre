@@ -33,11 +33,6 @@ class _NewsPageState extends State<NewsPage> {
           );
         },
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {},
-        heroTag: "btn1",
-        child: const Icon(Icons.refresh),
-      ),
     );
   }
 }
