@@ -52,6 +52,7 @@ class _HomePageControllerState extends State<HomePageController> {
             );
           }
           return Scaffold(
+            resizeToAvoidBottomInset: false,
             drawer: Drawer(
               child: ListView(children: [
                 UserAccountsDrawerHeader(
@@ -61,7 +62,7 @@ class _HomePageControllerState extends State<HomePageController> {
                         "https://www.zohowebstatic.com/sites/default/files/show/avatar_image.png"),
                   ),
                   accountName: Text(
-                    authController.firestoreUser.value?.apelido ??
+                    authController.firestoreUser.value?.username ??
                         "Nome Usuário",
                     style: TextStyle(
                       fontSize: 18,
@@ -83,9 +84,11 @@ class _HomePageControllerState extends State<HomePageController> {
                 ),
                 ListTile(
                   dense: true,
-                  title: Text('Profile'),
-                  selected: true,
-                  trailing: Icon(Icons.person),
+                  title: Text(
+                    'Profile',
+                    style: TextStyle(color: AppColor.primary),
+                  ),
+                  trailing: Icon(Icons.person, color: AppColor.primary),
                   onTap: () {
                     Get.to(
                       () => ProfilePage(
@@ -96,12 +99,10 @@ class _HomePageControllerState extends State<HomePageController> {
                   },
                 ),
                 ListTile(
-                  title: Text('Notificações'),
+                  title: Text(
+                    'Notificações',
+                  ),
                   trailing: Icon(Icons.notifications),
-                ),
-                ListTile(
-                  title: Text('Configurações'),
-                  trailing: Icon(Icons.settings),
                 ),
                 ListTile(
                   title: Text('Sair'),
