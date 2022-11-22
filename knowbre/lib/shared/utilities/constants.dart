@@ -1,24 +1,14 @@
-import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:uuid/uuid.dart';
 
-final kHintTextStyle = TextStyle(
-  color: Colors.white54,
-  fontFamily: 'OpenSans',
-);
+void showAlert(String massage) {
+  Get.snackbar("Erro", massage);
+}
 
-final kLabelStyle = TextStyle(
-  color: Colors.white,
-  fontWeight: FontWeight.bold,
-  fontFamily: 'OpenSans',
-);
+String generateId() {
+  return Uuid().v4();
+}
 
-final kBoxDecorationStyle = BoxDecoration(
-  color: Color(0xFF6CA8F1),
-  borderRadius: BorderRadius.circular(10.0),
-  boxShadow: [
-    BoxShadow(
-      color: Colors.black12,
-      blurRadius: 6.0,
-      offset: Offset(0, 2),
-    ),
-  ],
-);
+String generateIdArticle() {
+  return Uuid().v1();
+}

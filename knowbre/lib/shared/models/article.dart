@@ -3,7 +3,7 @@ import 'source_model.dart';
 class Article {
   Source source;
   String? author;
-  String title;
+  String? title;
   String? description;
   String url;
   String? urlToImage;
@@ -24,7 +24,7 @@ class Article {
     return Article(
       source: Source.fromJson(json['source']),
       author: json['author'] as String?,
-      title: json['title'] as String,
+      title: json['title'] as String?,
       description: json['description'] as String?,
       url: json['url'] as String,
       urlToImage: json['urlToImage'] as String?,

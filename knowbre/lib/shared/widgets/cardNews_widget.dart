@@ -150,7 +150,7 @@ Widget customListTile(Article article) {
           Column(
             children: [
               Text(
-                article.title,
+                article.title ?? '',
                 style: TextStyle(
                   fontWeight: FontWeight.bold,
                   fontSize: 16.0,

@@ -18,7 +18,7 @@ publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 version: 1.0.0+1
 
 environment:
-  sdk: ">=2.16.2 <3.0.0"
+  sdk: ">=2.16.2 <3.3.8"
 
 # Dependencies specify other packages that your package needs in order to work.
 # To automatically upgrade your package dependencies to the latest versions
@@ -45,12 +45,18 @@ dependencies:
   firebase_storage: ^10.3.9
   http: ^0.13.5
   url_launcher: ^6.1.6
+  uuid: ^3.0.6
+  firebase_database: ^9.1.7
+  cached_network_image: ^3.2.0
+  html_editor_enhanced: ^2.5.0
+  flutter_widget_from_html: ^0.9.0+1
   flutter_launcher_icons: "^0.11.0"
 
 flutter_icons:
   ios: true
   image_path: assets\images\ic_launcher-ios.png
   remove_alpha_ios: true
+
 
 flutter_native_splash:
   color: "#192EFF"

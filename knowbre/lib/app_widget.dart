@@ -7,6 +7,7 @@ import 'package:knowbre/pages/login/register_page.dart';
 import 'package:knowbre/pages/login/welcome_page.dart';
 import 'package:knowbre/pages/profile/profile_page.dart';
 import 'package:knowbre/pages/splash/landing_page.dart';
+import 'package:knowbre/shared/constants/controllers.dart';
 import 'package:knowbre/shared/widgets/cardPreview_widget.dart';
 
 import 'pages/profile/profile_edit_page.dart';
@@ -20,9 +21,15 @@ class AppWidget {
     GetPage(name: '/register', page: () => const RegisterPage()),
     GetPage(name: '/register2', page: () => const NextRegisterPage()),
     GetPage(name: '/forgot_password', page: () => const ForgotPasswordPage()),
-    GetPage(name: '/home', page: () => HomePageController()),
-    GetPage(name: '/profile', page: () => ProfilePage()),
+    GetPage(
+        name: '/home',
+        page: () => HomePageController(),
+        transition: Transition.cupertino),
+    GetPage(
+        name: '/profile',
+        page: () => ProfilePage(
+              profileId: authController.firebaseAuth.currentUser!.uid,
+            )),
     GetPage(name: '/profile_edit', page: () => ProfileEditPage()),
-    GetPage(name: '/card', page: () => CardPreview()),
   ];
 }

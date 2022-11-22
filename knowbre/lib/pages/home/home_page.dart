@@ -1,8 +1,12 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:http/http.dart';
+import 'package:knowbre/shared/constants/controllers.dart';
+import 'package:knowbre/shared/widgets/post_widget.dart';
 
-import 'package:knowbre/shared/services/auth_controller.dart';
-import 'package:knowbre/shared/themes/app_colors.dart';
+import '../../shared/models/post.dart';
 
 class HomePage extends StatefulWidget {
   HomePage({Key? key}) : super(key: key);
@@ -12,45 +16,56 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  Future<void> siginOutGoogle() async {
-    await AuthController().signOutGoogle();
+  @override
+  bool isLoading = false;
+  int postCount = 0;
+  List<Post> posts = [];
+
+  void initState() {
+    super.initState();
+    getPost();
   }
 
-  Widget _title() {
-    return const Text("Home");
+  getPost() async {
+    setState(() {
+      isLoading = true;
+    });
+    // QuerySnapshot snapshot = await firebaseFirestore
+    //     .collection("posts")
+    //     .doc(authController.firebaseAuth.currentUser?.uid)
+    //     .collection('userPost')
+    //     .orderBy('timestamp', descending: true)
+    //     .get();
+    QuerySnapshot snapshot =
+        await firebaseFirestore.collectionGroup("userPost").get();
+    setState(() {
+      isLoading = false;
+      postCount = snapshot.docs.length;
+      posts = snapshot.docs.map((doc) => Post.fromDocument(doc)).toList();
+    });
   }
 
-  Widget _signOutGoogleButton() {
-    return ElevatedButton(
-      onPressed: () {
-        AuthController().signOutGoogle();
-        Get.snackbar(
-          "LogOut",
-          "Você foi desconectado (Google)",
-          icon: Icon(Icons.check_circle_outline, color: AppColor.primary),
-          snackPosition: SnackPosition.BOTTOM,
-          backgroundColor: AppColor.snackBarBackground,
-          colorText: AppColor.background,
-        );
-      },
-      child: const Text("Sign Out Google"),
+  buildPost() {
+    if (isLoading) {
+      return CircularProgressIndicator();
+    } else if (posts.isEmpty) {
+      return Center(
+        child: Text("Sem Posts"),
+      );
+    }
+    List<PostWidget> postW = [];
+    posts.forEach((post) {
+      postW.add(PostWidget(post: post));
+    });
+    return Column(
+      children: postW,
     );
   }
 
-  @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Container(
-        height: double.infinity,
-        width: double.infinity,
-        padding: const EdgeInsets.all(20),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            _signOutGoogleButton(),
-          ],
-        ),
+      body: SingleChildScrollView(
+        child: buildPost(),
       ),
     );
   }

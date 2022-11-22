@@ -5,13 +5,14 @@ import 'package:get/get.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:knowbre/pages/home/home_page_controller.dart';
 import 'package:knowbre/pages/login/welcome_page.dart';
+import 'package:knowbre/shared/constants/controllers.dart';
 import 'package:knowbre/shared/models/user.dart' as model;
 import 'package:knowbre/shared/services/database.dart';
 import 'package:knowbre/shared/themes/app_colors.dart';
 
 class AuthController extends GetxController {
   static AuthController instance = Get.find();
-  final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
+  final FirebaseAuth firebaseAuth = FirebaseAuth.instance;
   Rxn<User?> _user = Rxn<User?>();
   Rxn<model.UserModel> firestoreUser = Rxn<model.UserModel>();
 
@@ -20,8 +21,8 @@ class AuthController extends GetxController {
   @override
   void onReady() async {
     super.onReady();
-    _user = Rxn<User?>(_firebaseAuth.currentUser);
-    _user.bindStream(_firebaseAuth.authStateChanges());
+    _user = Rxn<User?>(firebaseAuth.currentUser);
+    _user.bindStream(firebaseAuth.authStateChanges());
     ever(_user, _setInitialScreen);
   }
 
@@ -39,11 +40,11 @@ class AuthController extends GetxController {
       );
     } else {
       Get.offAll(() => const HomePageController(),
-          transition: Transition.native);
+          transition: Transition.cupertino);
     }
   }
 
-  Future<User?> get getUser async => _firebaseAuth.currentUser;
+  Future<User?> get getUser async => firebaseAuth.currentUser;
 
   Stream<model.UserModel> streamFirestoreUser() {
     print('streamFirestoreUser()');
@@ -64,9 +65,15 @@ class AuthController extends GetxController {
             model.UserModel.fromMap(documentSnapshot.data()!));
   }
 
+  getUserId() async {
+    final currentUser = firebaseAuth.currentUser;
+    DocumentSnapshot doc =
+        await firebaseFirestore.collection("users").doc(currentUser!.uid).get();
+  }
+
   Future signIn({required String email, required String password}) async {
     try {
-      await _firebaseAuth.signInWithEmailAndPassword(
+      await firebaseAuth.signInWithEmailAndPassword(
           email: email, password: password);
       return Get.snackbar(
         "Login",
@@ -110,7 +117,7 @@ class AuthController extends GetxController {
     String password,
     String nome,
   ) async {
-    UserCredential userCredential = await _firebaseAuth
+    UserCredential userCredential = await firebaseAuth
         .createUserWithEmailAndPassword(email: email, password: password);
 
     model.UserModel userModel = model.UserModel(
@@ -119,7 +126,7 @@ class AuthController extends GetxController {
       dataNasc: '',
       email: email,
       formacao: '',
-      nome: nome,
+      username: nome,
       photoURL: '',
       uid: userCredential.user!.uid,
     );
@@ -131,7 +138,7 @@ class AuthController extends GetxController {
 
   Future<void> resetPassword({required String email}) async {
     try {
-      await _firebaseAuth.sendPasswordResetEmail(email: email);
+      await firebaseAuth.sendPasswordResetEmail(email: email);
       Get.defaultDialog(
           title: 'Enviado!',
           middleText: 'Enviado a notificação para a redefinição da senha');
@@ -151,7 +158,7 @@ class AuthController extends GetxController {
   }
 
   Future<void> signOut() async {
-    await _firebaseAuth.signOut();
+    await firebaseAuth.signOut();
   }
 
   Future<User?> googleSignIn() async {
@@ -173,7 +180,7 @@ class AuthController extends GetxController {
         dataNasc: '',
         email: googleUser?.email,
         formacao: '',
-        nome: googleUser?.displayName,
+        username: googleUser?.displayName,
         photoURL: googleUser?.photoURL,
         uid: googleUser?.uid,
       );
@@ -199,7 +206,7 @@ class AuthController extends GetxController {
   }
 
   Future<void> signOutGoogle() async {
-    await _firebaseAuth.signOut();
+    await firebaseAuth.signOut();
     GoogleSignIn _googleSignIn = GoogleSignIn();
     await _googleSignIn.disconnect();
   }

@@ -1,52 +1,78 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/src/foundation/key.dart';
-import 'package:flutter/src/widgets/framework.dart';
+import 'package:knowbre/shared/models/post.dart';
 import '../themes/app_colors.dart';
 
 class CardPreview extends StatelessWidget {
-  const CardPreview({Key? key}) : super(key: key);
+  const CardPreview({
+    Key? key,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-     return Container(
-      height: 200,
-      child: Card(
-        elevation: 5,
-        margin: const EdgeInsets.all(10.0),
-        clipBehavior: Clip.antiAlias,
-        child: Column(
-          children: [
-            ListTile(
-              //Icone do Usuário
-              leading: CircleAvatar(backgroundImage: AssetImage('assets/images/default_avatar.png')),
-              //Nome de Usuário
-              title: Text(
-                'Nome de Usuário',
-                style: TextStyle(color: Colors.black.withOpacity(0.6)),
-              ),
-              subtitle: const Text(
-                'Título do Card',
-                style: TextStyle(color: AppColor.primary, fontSize: 22),
-              ),
-            ),
-            //Imagem e Descrição/Parte do texto
-            Row(
+    return Container(
+      width: MediaQuery.of(context).size.width,
+      margin: EdgeInsets.all(20.0),
+      decoration: BoxDecoration(
+        color: Color(0xff101010),
+        borderRadius: BorderRadius.circular(5.0),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Container(
+            width: MediaQuery.of(context).size.width,
+            height: 200.0,
+            child: Stack(
               children: [
-                Container(
-                  padding: EdgeInsets.all(10),
-                  child: Image.asset('assets/images/default_avatar.png', width: 80, height: 80)
-                ),
-                Expanded(
-                  child: Text(
-                    'Olha só que texto legal interessante super clicável extraordinário eletrizante chocante exuberante inteligente',
-                    style: TextStyle(color: Colors.black.withOpacity(0.6)),
+                ClipRRect(
+                  borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(5.0),
+                      topRight: Radius.circular(5.0)),
+                  child: Image(
+                    image: NetworkImage(''),
+                    filterQuality: FilterQuality.high,
+                    width: MediaQuery.of(context).size.width,
+                    fit: BoxFit.cover,
+                    color: Colors.black45,
+                    colorBlendMode: BlendMode.darken,
                   ),
-                )
+                ),
+                Align(
+                  alignment: Alignment.bottomCenter,
+                  child: Container(
+                    width: MediaQuery.of(context).size.width,
+                    height: 60.0,
+                    decoration: BoxDecoration(
+                        gradient: LinearGradient(
+                            colors: [Colors.transparent, Color(0xff101010)],
+                            begin: Alignment.topCenter,
+                            end: Alignment.bottomCenter)),
+                  ),
+                ),
               ],
             ),
-          ],
-        ),
-      )
+          ),
+          Container(
+            margin: EdgeInsets.symmetric(horizontal: 10.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text('Titulo',
+                    style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                    )),
+                SizedBox(height: 10.0),
+                Text('Descricao',
+                    style: TextStyle(
+                      fontSize: 14,
+                      fontWeight: FontWeight.bold,
+                    )),
+              ],
+            ),
+          )
+        ],
+      ),
     );
   }
 }

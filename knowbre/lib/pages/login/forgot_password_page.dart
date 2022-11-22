@@ -41,8 +41,9 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
   Widget _redefineBtn() {
     return Container(
       padding: const EdgeInsets.symmetric(vertical: 10.0),
+      height: 70,
       width: double.infinity,
-      child: RaisedButton(
+      child: ElevatedButton(
         onPressed: () {
           if (_formkey.currentState!.validate() == true) {
             AuthController()
@@ -50,9 +51,7 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
                 .then((value) {});
           }
         },
-        padding: const EdgeInsets.all(15.0),
-        color: AppColor.primary,
-        shape: Border.all(color: AppColor.primary),
+        style: ElevatedButton.styleFrom(primary: AppColor.primary),
         child: const Text(
           'Redefinir Senha',
           style: TextStyle(
@@ -70,14 +69,16 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
   Widget _voltarBtn() {
     return Container(
       padding: const EdgeInsets.symmetric(vertical: 10.0),
+      height: 70,
       width: double.infinity,
-      child: RaisedButton(
+      child: ElevatedButton(
         onPressed: () {
           Get.back();
         },
-        padding: const EdgeInsets.all(15.0),
-        color: AppColor.background,
-        shape: Border.all(color: AppColor.primary),
+        style: ElevatedButton.styleFrom(
+          primary: AppColor.background,
+          side: BorderSide(color: AppColor.primary, width: 1),
+        ),
         child: const Text(
           'Voltar',
           style: TextStyle(
