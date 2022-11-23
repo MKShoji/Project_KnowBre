@@ -43,6 +43,7 @@ class _MyAppState extends State<MyApp> {
             return GetMaterialApp(
               initialRoute: "/welcome",
               getPages: AppWidget.routes,
+              debugShowCheckedModeBanner: false,
             );
           } else {
             return const Material(

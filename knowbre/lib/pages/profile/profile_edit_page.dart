@@ -55,7 +55,7 @@ class _ProfileEditPageState extends State<ProfileEditPage> {
                         .collection("users")
                         .doc(authController.user?.uid)
                         .update({
-                      'apelido': apelidoController.text,
+                      'username': apelidoController.text,
                       'dateNasc': dataController.text,
                       'formacao': formacaoController.text,
                       'localizacao': localizacaoController.text,

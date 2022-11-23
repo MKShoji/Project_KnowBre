@@ -100,9 +100,31 @@ class _HomePageControllerState extends State<HomePageController> {
                 ),
                 ListTile(
                   title: Text(
-                    'Notificações',
+                    'Home',
                   ),
-                  trailing: Icon(Icons.notifications),
+                  onTap: () {
+                    setState(() {
+                      currentScreen = HomePage();
+                      currentTab = 0;
+                    });
+                  },
+                  trailing: Icon(
+                    Icons.home,
+                  ),
+                ),
+                ListTile(
+                  title: Text(
+                    'InfoBre',
+                  ),
+                  onTap: () {
+                    setState(() {
+                      currentScreen = const NewsPage();
+                      currentTab = 3;
+                    });
+                  },
+                  trailing: Icon(
+                    Icons.newspaper,
+                  ),
                 ),
                 ListTile(
                   title: Text('Sair'),
@@ -137,8 +159,6 @@ class _HomePageControllerState extends State<HomePageController> {
               shadowColor: AppColor.background,
               elevation: 1,
               actions: [
-                Icon(Icons.notifications),
-                Padding(padding: EdgeInsets.symmetric(horizontal: 5)),
                 GestureDetector(
                   onTap: () {
                     Get.to(
@@ -162,7 +182,22 @@ class _HomePageControllerState extends State<HomePageController> {
               child: currentScreen,
             ),
             floatingActionButton: FloatingActionButton(
-              child: Icon(Icons.visibility_outlined, size: 30),
+              child: Container(
+                child: Icon(
+                  Icons.visibility_outlined,
+                  size: 30,
+                  color: AppColor.background,
+                ),
+                width: 60,
+                height: 60,
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  gradient: LinearGradient(
+                    colors: [AppColor.primary, AppColor.primaryg],
+                    begin: Alignment.topCenter,
+                  ),
+                ),
+              ),
               onPressed: () {},
             ),
             floatingActionButtonLocation:
